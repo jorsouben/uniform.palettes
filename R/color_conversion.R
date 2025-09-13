@@ -6,18 +6,24 @@
 #'
 #' @return Numeric matrix with columns `red`, `green`, `blue` and row names
 #'  as color names (or HEX codes if names are missing).
+#' @importFrom grDevices col2rgb
 #' @export
 hex2rgb <- function(x, maxvalue = 1) {
-  rgb_matrix <- t(col2rgb(x)) / (255 / maxvalue)
+  # Ensure hex codes have # prefix
+  x_fixed <- ifelse(!grepl("^#", x), paste0("#", x), x)
+  rgb_matrix <- t(col2rgb(x_fixed)) / (255 / maxvalue)
 
   colornames <- names(x)
-  missing_idx <- if (is.null(colornames)) {
-    rep(TRUE, length(x))
+  if (!is.null(colornames)) {
+    # For named inputs, use names where available, hex codes where missing
+    missing_idx <- is.na(colornames) | colornames == ""
+    rownames(rgb_matrix) <- colornames
+    rownames(rgb_matrix)[missing_idx] <- toupper(x[missing_idx])
   } else {
-    is.na(colornames) | colornames == ""
+    # For unnamed inputs, use hex codes
+    rownames(rgb_matrix) <- toupper(x)
   }
 
-  rownames(rgb_matrix)[missing_idx] <- toupper(x[missing_idx])
   rgb_matrix
 }
 

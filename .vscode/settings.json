@@ -1,0 +1,13 @@
+{
+  // Use radian as the default terminal profile
+  "terminal.integrated.defaultProfile.windows": "radian",
+  // Define the radian profile
+  "terminal.integrated.profiles.windows": {
+    "radian": {
+      "path": "C:\\Users\\Yo\\.local\\bin\\radian.exe"
+    }
+  },
+  // Optional: always use active terminal for R code
+  "r.alwaysUseActiveTerminal": true,
+  "r.bracketedPaste": true
+}

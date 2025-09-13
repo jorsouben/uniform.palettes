@@ -20,30 +20,37 @@ df_rgb_prepare <- function(
 #' Generate palette information from RGB matrix
 #'
 #' @param rgb_matrix Numeric matrix of RGB values in `[0,1]`.
-#' @param hexvalues Optional character vector of HEX codes for the colors.
 #'
 #' @return Tibble with columns: name, hex, red, green, blue,
 #'   L, a, b, delta_2000, cum_delta_2000.
 #' @export
-palette_info <- function(rgb_matrix, hexvalues = NULL) {
+palette_info <- function(rgb_matrix) {
   lab_mat <- rgb2lab(rgb_matrix)
 
+  # Calculate hex values for all colors
+  hex_values <- grDevices::rgb(
+    rgb_matrix[, "red"],
+    rgb_matrix[, "green"],
+    rgb_matrix[, "blue"]
+  )
+
+  # Use existing rownames or hex values if missing
+  names_to_use <- if (!is.null(rownames(rgb_matrix))) {
+    ifelse(rownames(rgb_matrix) == "", hex_values, rownames(rgb_matrix))
+  } else {
+    hex_values
+  }
+
   df <- tibble::tibble(
-    name  = rownames(rgb_matrix),
+    name  = names_to_use,
     red   = rgb_matrix[, "red"],
     green = rgb_matrix[, "green"],
     blue  = rgb_matrix[, "blue"],
     L     = lab_mat[, "L"],
     a     = lab_mat[, "a"],
-    b     = lab_mat[, "b"]
+    b     = lab_mat[, "b"],
+    hex   = hex_values
   )
-
-  # Always create hex column
-  if (is.null(hexvalues)) {
-    df$hex <- grDevices::rgb(df$red, df$green, df$blue)
-  } else {
-    df$hex <- toupper(hexvalues)
-  }
 
   delta <- c(NA, purrr::map_dbl(2:nrow(df), function(i) {
     ColorNameR::colordiff(
@@ -69,6 +76,12 @@ palette_info <- function(rgb_matrix, hexvalues = NULL) {
 #' @return Tibble as returned by palette_info().
 #' @export
 hex2palette_info <- function(hex_vec) {
+  # Keep original names before conversion
+  original_names <- names(hex_vec)
   rgb_mat <- hex2rgb(hex_vec, maxvalue = 1)
-  palette_info(rgb_mat, hexvalues = hex_vec)
+  # If hex_vec was named, ensure those names are preserved
+  if (!is.null(original_names)) {
+    rownames(rgb_mat) <- original_names
+  }
+  palette_info(rgb_mat)
 }
