@@ -1,0 +1,18 @@
+Package: unipals
+Title: Utils For Uniform Color Palettes
+Version: 0.0.0.9000
+Authors@R:
+    person(
+        "Jordán",
+        "Soubrier",
+        role = c("aut", "cre"),
+        comment = c(GitHub = "youruser")
+    )
+Description: An experimental package to create and diagnose perceptually uniform color palettes.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 3.5)
+LazyData: true

@@ -1,0 +1,43 @@
+# --- Locale & Encoding ---
+# Force UTF-8 locale (adjust if your system uses a different name for Spanish UTF-8)
+try(Sys.setlocale("LC_ALL", "Spanish_Spain.UTF-8"), silent = TRUE)
+
+# Always use UTF-8 encoding
+options(encoding = "UTF-8")
+
+# --- Help behaviour ---
+# Use text help when developing (avoids VSCode WebView restriction)
+if (requireNamespace("desc", quietly = TRUE)) {
+  pkg <- try(desc::desc_get("Package"), silent = TRUE)
+  if (!inherits(pkg, "try-error")) {
+    options(help_type = "text")
+  }
+}
+
+
+# --- Devtools helpers ---
+# Load devtools automatically if available
+if (requireNamespace("devtools", quietly = TRUE)) {
+  # Shortcut to reload package quickly
+  reload <- function() devtools::load_all(export_all = FALSE)
+}
+
+# --- Radian tweaks ---
+# If running in radian, enable bracketed paste and multiline editing
+if (Sys.getenv("RADIAN_VERSION") != "") {
+  options(radian.bracketedPaste = TRUE)
+}
+
+# --- Quarto integration ---
+# Ensure quarto is on PATH for rendering
+if (nzchar(Sys.which("quarto"))) {
+  options(quarto.path = Sys.which("quarto"))
+}
+
+# Styler configuration
+if (requireNamespace("styler", quietly = TRUE)) {
+  options(
+    styler.indent_by = 2,
+    styler.colored_print.vertical = FALSE
+  )
+}

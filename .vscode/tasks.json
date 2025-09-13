@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Reload & Test Package",
+            "type": "shell",
+            // Runs in your *current* R terminal via vscode-R
+            "command": "R",
+            "args": [
+                "--slave",
+                "-e",
+                "devtools::load_all(); devtools::test()"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Reload & Check Package",
+            "type": "shell",
+            // Runs in a clean R process for CRAN-style checks
+            "command": "Rscript",
+            "args": [
+                "-e",
+                "devtools::document(); devtools::check()"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
