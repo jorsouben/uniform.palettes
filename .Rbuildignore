@@ -5,3 +5,4 @@
 ^\.RProfile$
 ^\.radian_profile$
 ^\.vscode$
+^\dev$

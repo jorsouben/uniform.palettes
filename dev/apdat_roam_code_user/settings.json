@@ -1,0 +1,81 @@
+{
+  // --- R setup ---
+  "r.rterm.windows": "C:\\Users\\Yo\\.local\\bin\\radian.exe", // use radian for better REPL
+  "r.alwaysUseActiveTerminal": true,
+  "r.bracketedPaste": true,
+  "r.plot.useHttpgd": true,
+  "r.sessionWatcher": true,
+  "r.lsp.debug": false,
+  "r.lsp.diagnostics": true,
+  "r.lintr.enabled": true,
+  "r.lintr.cache": true,
+  // --- Quarto ---
+  "quarto.path": "C:\\Program Files\\Quarto\\bin\\quarto.exe",
+  "quarto.render.onSave": true,
+  // --- Theme ---
+  "workbench.colorTheme": "Gruvbox Black", // install 'mandeepsran.gruvbox-black' or similar
+  "workbench.preferredDarkColorTheme": "Gruvbox Black",
+  // --- Editor quality of life ---
+  "editor.formatOnSave": true,
+  "editor.rulers": [
+    80
+  ],
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  // --- Jupyter integration for .qmd/.ipynb ---
+  "jupyter.interactiveWindowMode": "perFile",
+  "jupyter.askForKernelRestart": false,
+  // --- Vim motions (requires VSCodeVim extension) ---
+  "vim.leader": " ", // space as leader key
+  "vim.hlsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.smartRelativeLine": true,
+  "vim.insertModeKeyBindingsNonRecursive": [],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<leader>",
+        "w"
+      ],
+      "commands": [
+        "workbench.action.files.save"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "q"
+      ],
+      "commands": [
+        "workbench.action.closeActiveEditor"
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [],
+  // Terminal
+  "terminal.integrated.profiles.windows": {
+    "Nu Shell": {
+      "path": "C:\\Users\\Yo\\AppData\\Local\\Programs\\nu\\bin\\nu.exe"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "Nu Shell",
+  // Encoding
+  "files.encoding": "utf8",
+  // Global default indentation settings
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  // Language-specific override for R
+  "[r]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  // Editor font settings
+  "editor.fontFamily": "'FiraCode Nerd Font', 'Fira Code', monospace",
+  "editor.fontSize": 14,
+  "editor.fontLigatures": true,
+  // Terminal font settings
+  "terminal.integrated.fontFamily": "'FiraCode Nerd Font'",
+  "terminal.integrated.fontSize": 14,
+  "git.autofetch": true
+}

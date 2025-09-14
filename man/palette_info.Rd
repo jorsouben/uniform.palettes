@@ -4,12 +4,10 @@
 \alias{palette_info}
 \title{Generate palette information from RGB matrix}
 \usage{
-palette_info(rgb_matrix, hexvalues = NULL)
+palette_info(rgb_matrix)
 }
 \arguments{
 \item{rgb_matrix}{Numeric matrix of RGB values in \verb{[0,1]}.}
-
-\item{hexvalues}{Optional character vector of HEX codes for the colors.}
 }
 \value{
 Tibble with columns: name, hex, red, green, blue,
