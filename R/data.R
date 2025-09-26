@@ -24,3 +24,17 @@
 #'   \item{red}{#C43E4E}
 #' }
 "igepal_hex"
+
+#' IGEPAL2 Example Color Palette
+#'
+#' A named vector of HEX color codes representing a simple categorical color palette.
+#'
+#' @format A character vector with 4 named HEX color codes:
+#' \describe{
+#'   \item{yellow}{#FFCC00}
+#'   \item{green}{#4EC433}
+#'   \item{soft_blue}{#0099CC}
+#'   \item{blue}{#007bc4}
+#'   \item{red}{#D81126}
+#' }
+"igepal_hex2"

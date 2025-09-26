@@ -1,20 +1,41 @@
+# #' Prepare RGB data for palette_info
+# #'
+# #' @param rgb_data Data frame or matrix with RGB values by row.
+# #' @param maxvalue Maximum value in the input RGB data (default = 1).
+# #' @param channel_map Named character vector mapping `"red"`, `"green"`, `"blue"`
+# #'   to the corresponding column names in `rgb_data`.
+# #'
+# #' @return Numeric matrix of RGB values scaled to `[0,1]` with columns
+# #'  `red`, `green`, `blue`.
+# #' @export
+# df_rgb_prepare <- function(
+#     rgb_data,
+#     maxvalue = 1,
+#     channel_map = c(red = "r", green = "g", blue = "b")) {
+#   rgb_matrix <- as.matrix(rgb_data[, channel_map])
+#   colnames(rgb_matrix) <- c("red", "green", "blue")
+#   rgb_matrix / maxvalue
+# }
+
 #' Prepare RGB data for palette_info
 #'
 #' @param rgb_data Data frame or matrix with RGB values by row.
 #' @param maxvalue Maximum value in the input RGB data (default = 1).
-#' @param channel_map Named character vector mapping `"red"`, `"green"`, `"blue"`
-#'   to the corresponding column names in `rgb_data`.
+#' @param channel_map Named character vector mapping "red","green","blue"
+#'   to the corresponding column names in rgb_data.
 #'
-#' @return Numeric matrix of RGB values scaled to `[0,1]` with columns
-#'  `red`, `green`, `blue`.
+#' @return Numeric matrix of RGB values scaled to [0,1] with columns red, green, blue.
 #' @export
-df_rgb_prepare <- function(
-    rgb_data,
-    maxvalue = 1,
-    channel_map = c(red = "r", green = "g", blue = "b")) {
-  rgb_matrix <- as.matrix(rgb_data[, channel_map])
-  colnames(rgb_matrix) <- c("red", "green", "blue")
-  rgb_matrix / maxvalue
+df_rgb_prepare <- function(rgb_data, maxvalue = 1,
+                           channel_map = c(red = "red", green = "green", blue = "blue")) {
+  rgb_df <- as.data.frame(rgb_data, stringsAsFactors = FALSE)
+  missing_cols <- setdiff(unname(channel_map), colnames(rgb_df))
+  if (length(missing_cols)) {
+    stop("Missing expected columns in rgb_data: ", paste(missing_cols, collapse = ", "))
+  }
+  mat <- as.matrix(rgb_df[, channel_map, drop = FALSE])
+  colnames(mat) <- c("red", "green", "blue")
+  mat / maxvalue
 }
 
 #' Generate palette information from RGB matrix

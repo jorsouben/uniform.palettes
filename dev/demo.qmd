@@ -1,0 +1,137 @@
+---
+# Metadata
+title: "Demo paletas IGE"
+author: "Jordán Soubrier Benavides"
+date: today
+
+# Idioma
+lang: es
+language:
+  related-formats-title: Outros formatos
+  toc-title-document: Índice
+  table-title: Cadro
+  figure-title: Figura
+  crossref-fig-title: Figura
+  crossref-tbl-title: Cadro
+  crossref-eq-prefix: Ecuación
+  title-block-published: Data de creación
+
+# Opcións xerais do documento
+toc: false
+number-sections: true
+
+editor: source
+
+# Opcións de execución e mostra de código
+execute:
+  cache: false
+  echo: false
+  message: true #false
+  warning: true #false
+
+# Formatos saída
+format:
+  # Typst
+  typst:
+    keep-typ: true
+    fig-format: svg
+    papersize: a4
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    number-depth: 3
+    section-numbering: 1.1.a
+    columns: 1
+    # heading-family: "Xunta Sans"
+    # mainfont: ETBembo
+    # mainfont: FiraCode Nerd Font
+    # monofont: FiraCode Nerd Font
+    # mainfont: Xunta Sans
+    #sansfont: XuntaSans
+    fontsize: 12pt
+    # Para táboas con fórmulas
+    # include-in-header:
+    #   - file: typst_preamble.typ
+
+  # HTML
+  html:
+    math: mathjax
+    mainfont: Xunta Sans
+    code-fold: true
+    code-tools: true
+    # df-print: paged #default/paged/kable/tibble
+---
+
+Comecemos cunha paleta baseada na cor azul corporativo da Xunta e as cores da bandeira de Galicia
+
+```{r}
+#| label: fig-1
+#| fig-cap: "Paletas"
+#| column: body
+#| out-width: 100%
+
+# pals::pal.bands(unipals::igepal_hex)
+pals::pal.bands(unipals::igepal_hex2)
+
+# Extend the palette igepal_hex2 to 256 colors
+pal256 <-
+  igepal_hex2 |>
+  extend_palette_equal_ciede2000(
+    n = 256,
+    fixed_hex = "#007bc4",
+    mode = "anchor_exact"
+  )
+
+pals::pal.bands(pal256$hex)
+colorspace::swatchplot(pal256$hex)
+pals::pal.sineramp(pal256$hex)
+# Plot the delta2000 values of pal256
+pal256$delta_2000 |>
+  na.omit() |>
+  plot(type = "b", pch = 19, col = "blue", ylab = "Delta E 2000", xlab = "Color index")
+
+# Plot the L channel values of pal256
+pal256$L |>
+  plot(type = "b", pch = 19, col = "blue", ylab = "L channel", xlab = "Color index")
+
+igepal_hex2 |>
+  hex2rgb() |>
+  palette_info()
+```
+
+Comparemos con batlow
+```{r}
+#| label: fig-2
+#| fig-cap: "Paleta batlow"
+#| column: body
+#| out_width: 100%
+
+batlowfull <-
+  unipals::batlow_df |>
+  df_rgb_prepare(channel_map = c(red = "r", green = "g", blue = "b")) |>
+  palette_info()
+
+# save as svg
+svg("batlow_palette.svg", width = 8, height = 8)
+bandplot <-
+  pals::pal.bands(batlowfull$hex)
+dev.off()
+```
+
+Probemos a ecualizar a paleta igepal_hex2 con 6 cores
+```{r}
+#| label: fig-3
+#| fig-cap: "Paleta igepal_hex2"
+#| column: body
+#| out_width: 100%
+
+# Extend the palette igepal_hex2 to 6 colors
+igepal6 <-
+  igepal_hex2 |>
+  extend_palette_equal_ciede2000(
+    n = 6,
+    fixed_hex = "#007bc4",
+    mode = "anchor_exact"
+  )
+pals::pal.bands(igepal6$hex)
+```

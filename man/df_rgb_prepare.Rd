@@ -7,7 +7,7 @@
 df_rgb_prepare(
   rgb_data,
   maxvalue = 1,
-  channel_map = c(red = "r", green = "g", blue = "b")
+  channel_map = c(red = "red", green = "green", blue = "blue")
 )
 }
 \arguments{
@@ -15,12 +15,11 @@ df_rgb_prepare(
 
 \item{maxvalue}{Maximum value in the input RGB data (default = 1).}
 
-\item{channel_map}{Named character vector mapping \code{"red"}, \code{"green"}, \code{"blue"}
-to the corresponding column names in \code{rgb_data}.}
+\item{channel_map}{Named character vector mapping "red","green","blue"
+to the corresponding column names in rgb_data.}
 }
 \value{
-Numeric matrix of RGB values scaled to \verb{[0,1]} with columns
-\code{red}, \code{green}, \code{blue}.
+Numeric matrix of RGB values scaled to \link{0,1} with columns red, green, blue.
 }
 \description{
 Prepare RGB data for palette_info
