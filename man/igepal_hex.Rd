@@ -7,10 +7,9 @@
 \format{
 A character vector with 4 named HEX color codes:
 \describe{
-\item{yellow}{#FFCC00}
-\item{green}{#4EC433}
-\item{blue}{#007bc4}
-\item{red}{#C43E4E}
+\item{PANTONE 186 C}{#C8102E}
+\item{PANTONE 7461 C}{#007DBA}
+\item{PANTONE Yellow}{#FEDD00}
 }
 }
 \usage{

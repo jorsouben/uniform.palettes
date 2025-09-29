@@ -18,23 +18,25 @@
 #'
 #' @format A character vector with 4 named HEX color codes:
 #' \describe{
-#'   \item{yellow}{#FFCC00}
-#'   \item{green}{#4EC433}
-#'   \item{blue}{#007bc4}
-#'   \item{red}{#C43E4E}
+#'   \item{PANTONE 186 C}{#C8102E}
+#'   \item{PANTONE 7461 C}{#007DBA}
+#'   \item{PANTONE Yellow}{#FEDD00}
 #' }
 "igepal_hex"
 
-#' IGEPAL2 Example Color Palette
+#' Example Map Data
 #'
-#' A named vector of HEX color codes representing a simple categorical color palette.
+#' This is a shapefile included in the package under `inst/extdata/map/`.
+#' It contains a map of the municipalities of Galicia for demonstration purposes.
 #'
-#' @format A character vector with 4 named HEX color codes:
-#' \describe{
-#'   \item{yellow}{#FFCC00}
-#'   \item{green}{#4EC433}
-#'   \item{soft_blue}{#0099CC}
-#'   \item{blue}{#007bc4}
-#'   \item{red}{#D81126}
-#' }
-"igepal_hex2"
+#' To load it:
+#' ```
+#' map_path <- system.file("extdata/map_gal/Concellos_IGN.shp", package = "unipals")
+#' sf::st_read(map_path)
+#' ```
+#'
+#' @format A shapefile with associated `.dbf`, `.shx`, and `.prj` files.
+#' @source Created manually for package illustration.
+#' @name mapa_galicia
+#' @docType data
+NULL

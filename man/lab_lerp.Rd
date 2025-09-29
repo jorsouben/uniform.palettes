@@ -11,7 +11,7 @@ lab_lerp(lab1, lab2, t)
 
 \item{lab2}{Numeric length-3 vector (L, a, b).}
 
-\item{t}{Numeric in \link{0, 1}, interpolation parameter.}
+\item{t}{Numeric in \verb{[0, 1]}, interpolation parameter.}
 }
 \value{
 Numeric length-3 vector at parameter t.

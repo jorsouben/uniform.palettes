@@ -19,7 +19,7 @@ A list with:
 \item labs: sampled Lab points (matrix),
 \item cumlen: cumulative CIEDE2000 length starting at 0,
 \item seg_index: segment index for each sampled point (1..nseg),
-\item seg_t: local t in \link{0,1} within each segment for each sampled point.
+\item seg_t: local t in \verb{[0,1]} within each segment for each sampled point.
 }
 }
 \description{

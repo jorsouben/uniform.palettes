@@ -11,7 +11,7 @@ lab_path_at_cumlen(sampling, targets)
 \item{sampling}{Output of lab_path_sample().}
 
 \item{targets}{Numeric vector of target cumulative lengths
-(must be within \link{0, total_length}).}
+(must be within \verb{[0, total_length]}).}
 }
 \value{
 Matrix of Lab points at target positions.

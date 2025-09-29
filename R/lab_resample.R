@@ -42,7 +42,7 @@ delta2000_seq <- function(lab_matrix) {
 #'
 #' @param lab1 Numeric length-3 vector (L, a, b).
 #' @param lab2 Numeric length-3 vector (L, a, b).
-#' @param t Numeric in [0, 1], interpolation parameter.
+#' @param t Numeric in `[0, 1]`, interpolation parameter.
 #'
 #' @return Numeric length-3 vector at parameter t.
 #' @export
@@ -61,7 +61,7 @@ lab_lerp <- function(lab1, lab2, t) {
 #'   - labs: sampled Lab points (matrix),
 #'   - cumlen: cumulative CIEDE2000 length starting at 0,
 #'   - seg_index: segment index for each sampled point (1..nseg),
-#'   - seg_t: local t in [0,1] within each segment for each sampled point.
+#'   - seg_t: local t in `[0,1]` within each segment for each sampled point.
 #' @export
 lab_path_sample <- function(lab_controls, samples_per_segment = 200L) {
   stopifnot(ncol(lab_controls) == 3L)
@@ -101,7 +101,7 @@ lab_path_sample <- function(lab_controls, samples_per_segment = 200L) {
 #'
 #' @param sampling Output of lab_path_sample().
 #' @param targets Numeric vector of target cumulative lengths
-#' (must be within [0, total_length]).
+#' (must be within `[0, total_length]`).
 #'
 #' @return Matrix of Lab points at target positions.
 #' @export

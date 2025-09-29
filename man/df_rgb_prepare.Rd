@@ -19,7 +19,7 @@ df_rgb_prepare(
 to the corresponding column names in rgb_data.}
 }
 \value{
-Numeric matrix of RGB values scaled to \link{0,1} with columns red, green, blue.
+Numeric matrix of RGB values scaled to \verb{[0,1]} with columns red, green, blue.
 }
 \description{
 Prepare RGB data for palette_info

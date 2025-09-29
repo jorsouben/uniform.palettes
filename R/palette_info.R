@@ -24,7 +24,7 @@
 #' @param channel_map Named character vector mapping "red","green","blue"
 #'   to the corresponding column names in rgb_data.
 #'
-#' @return Numeric matrix of RGB values scaled to [0,1] with columns red, green, blue.
+#' @return Numeric matrix of RGB values scaled to `[0,1]` with columns red, green, blue.
 #' @export
 df_rgb_prepare <- function(rgb_data, maxvalue = 1,
                            channel_map = c(red = "red", green = "green", blue = "blue")) {
