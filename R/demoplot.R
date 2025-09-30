@@ -1,11 +1,12 @@
 #' A demo plot using a given palette, with the option to simulate CVDs
 #'
-#' @param palette A palette function that returns hex color codes.
+#' @param pal A palette function that returns hex color codes.
 #' @param cvd Character, optional, indicates the color deficiency to emulate.
 #'  Can be 'protan', 'tritan', 'deutan', or 'desaturate'.
 #'
 #' @return A grid of plots demoing the palette.
-#'
+#' @importFrom ggplot2 ggplot aes geom_col geom_line geom_sf theme_minimal labs
+#'   coord_polar theme_void
 #' @export
 demoplot <- function(pal = demopal, cvd = NULL) {
   # --- CVD correction ---
@@ -34,7 +35,6 @@ demoplot <- function(pal = demopal, cvd = NULL) {
   p1 <- ggplot(bar_data, aes(x = category, y = value, fill = category)) +
     geom_col() +
     scale_fill_unipals_d(n = nrow(bar_data), pal) +
-    # scale_fill_brewer(palette = "Set2") +
     theme_minimal() +
     labs(title = "Bar Plot")
 
@@ -45,15 +45,14 @@ demoplot <- function(pal = demopal, cvd = NULL) {
       package = "unipals"
     )
 
-  map_data <- st_read(map_path, quiet = TRUE)
+  map_data <- sf::st_read(map_path, quiet = TRUE)
 
   # Add fictitious values to polygons
-  map_data <- map_data %>%
-    mutate(value = runif(n(), 0, 100))
+  map_data <- map_data |>
+    dplyr::mutate(value = runif(dplyr::n(), 0, 100))
 
   p2 <- ggplot(map_data) +
     geom_sf(aes(fill = value)) +
-    # scale_fill_viridis_c(option = "C") +
     scale_fill_unipals_c(pal) +
     theme_minimal() +
     labs(title = "Map Plot")
