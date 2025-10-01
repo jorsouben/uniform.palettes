@@ -38,10 +38,15 @@ demoplot(scipal("hawaii"))
 demoplot(scipal("navia"))
 demoplot(scipal("managua"))
 
-
 demoplot(demopal)
 
 scico::scico_palette_show()
 
-
 mono_gradient(24)$hex |> pals::pal.bands()
+
+scico::scico(5, palette = "batlow", categorical = TRUE) |> pals::pal.bands()
+
+scico::scico(5, palette = "hawaii", categorical = TRUE) |> pals::pal.bands()
+
+scico::scico(5, palette = "tokyo") |> pals::pal.bands()
+scico::scico(5, palette = "hawaii") |> pals::pal.bands()
