@@ -40,7 +40,7 @@ format:
   # Typst
   typst:
     keep-typ: true
-    fig-format: png
+    fig-format: svg
     papersize: a4
     toc: false
     # toc-depth: 3
@@ -62,7 +62,7 @@ format:
 
 # Introdución
 
-A elaboración dunha paleta de cores para o IGE require respectar a imaxe corporativa da Xunta de Galicia. Esto implica empregar como cor principal o *azul corporativo*, ca posibilidade de facer uso ademáis das cores secundarias:
+A elaboración dunha paleta de cores para o IGE esixe respectar a imaxe corporativa da Xunta de Galicia. Isto implica empregar como cor principal o *azul corporativo*, ca posibilidade de facer uso ademáis das cores secundarias:
 
 ```{r}
 #| label: tbl-01
@@ -71,10 +71,12 @@ A elaboración dunha paleta de cores para o IGE require respectar a imaxe corpor
 library(tinytable)
 library(dplyr)
 library(tibble)
+
+devtools::load_all()
 # library(purrr)
 # library(tidyverse)
 
-azul_ramp <- colorRampPalette(c("#007bC4", "#FFFFFF"))
+azul_ramp <- colorRampPalette(c(igepal_hex[2], "#FFFFFF"))
 
 # Interpolamos linealmente para obter as cores "diluídas"
 azuis <- c(
@@ -135,51 +137,56 @@ taboa_cores <-
 taboa_cores
 ```
 
-A interface web debería empregar únicamente estas cores e ao sumo algunha cor de
+Para manter unha imaxe coherente, non recargada e compatible ca imaxe corporativa da Xunta de Galicia, a interface web debería empregar únicamente estas cores e ao sumo algunha cor de
 contraste para resaltar certos elementos.
 
 Como suxerencias, propoño unha cor vermella moi próxima á presente na bandeira
-de Galicia e o ton vermello da bandeira da UE.
+de Galicia e o ton amarelo da bandeira da UE.
 
 
 ```{r}
 #| label: fig-1
-#| fig-cap: "Paletas"
+#| fig-cap: "Proposta paleta web"
 #| column: body
 #| out-width: 100%
-devtools::load_all()
-# pals::pal.bands(unipals::igepal_hex)
-pals::pal.bands(unipals::igepal_hex2)
 
-# Pantone 186 C	#C8102E
+xunta_pal <- cores_hex
 
-# Extend the palette igepal_hex2 to 256 colors
-pal256 <-
-  igepal_hex2 |>
-  extend_palette_equal_ciede2000(
-    n = 256,
-    fixed_hex = "#007bc4",
-    mode = "anchor_exact"
-  )
+names(xunta_pal) <-
+  cores_xunta$Pantone |>
+  stringr::str_replace_all("(\\d{4} C)", "PANTONE \\1")
 
-pals::pal.bands(pal256$hex)
-colorspace::swatchplot(pal256$hex)
-pals::pal.sineramp(pal256$hex)
-# Plot the delta2000 values of pal256
-pal256$delta_2000 |>
-  na.omit() |>
-  plot(type = "b", pch = 19, col = "blue", ylab = "Delta E 2000", xlab = "Color index")
+xunta_pal <- c(
+  Negro = "#000000",
+  igepal_hex[-2],
+  xunta_pal
+)
 
-# Plot the L channel values of pal256
-pal256$L |>
-  plot(type = "b", pch = 19, col = "blue", ylab = "L channel", xlab = "Color index")
-
-igepal_hex2 |>
-  hex2rgb() |>
-  palette_info()
+pals::pal.bands(xunta_pal, sort = "none")
+# pals::pal.bands(xunta_pal, sort = "hue")
+# pals::pal.bands(xunta_pal, sort = "luminance")
 ```
+# Representación de datos estatísticos
 
-Comparemos con batlow
+Un concepto que debe quedar perfectamente claro é que a paleta web ou corporativa e a paleta de cores para a representación gráfica da produción estatística son entidades completamente diferentes.
+
+Mentres que a paleta para os elementos web pode --e debe-- adoitar a imaxe corporativa estabelecida, a paleta ou paletas empregadas na difusión de datos, aínda podendo achegarse en tonalidade ás cores corporativas, debe cumprir certos requisitos que garantan a comunicación adecuada deses datos.
+
+Para a elección de cores para a difusión de datos deben adoitarse os principios científicos máis modernos, especialmente tendo en conta que somos un organismo oficial de produción e difusión estatística.
+
+As cores deben ser seleccionadas atendendo a procedementos obxectivos e rigorosos que garantan a transmisión visual da información minimizando as desviacións respecto dos datos reais, asi como a inclusión das persoas con deficiencias na percepción da cor/con visión cromática alterada.
+
+Segundo os estudos máis recentes ao respecto, as características fundamentais que debe verificar un mapa ou paleta de cores axeitada para a representación veraz de datos son:
+
+1. Uniformidade perceptual.
+2. Inclusividade das persoas con alteracións da visión cromática.
+3. Orde perceptual.
+
+## Uniformidade perceptual
+
+#Tentando crear unha paleta que cumpra os requisitos
+
+Partamos das 3 cores básicas da paleta corporativa que establecimos e extendámola mediante as ferramentas recén creadas a un número desexado de cores (p.ex. 16), ecualizando para acadar a uniformidade perceptual. As funcións creadas garanten que a distancia entre cada par de cores no espazo CIELab --ca medida $\Delta$2000-- é estable ao longo de toda a paleta.
 
 ```{r}
 #| label: fig-2
@@ -192,28 +199,22 @@ batlowfull <-
   df_rgb_prepare(channel_map = c(red = "r", green = "g", blue = "b")) |>
   palette_info()
 
-# save as svg
-svg("batlow_palette.svg", width = 8, height = 8)
-bandplot <-
-  pals::pal.bands(batlowfull$hex)
-dev.off()
+xunta_pal |>
+  colorspace::swatchplot(cvd = c("desaturated", "tritanope", "protanope", "deutan"))
+
+igepal_hex |>
+  colorspace::swatchplot(cvd = c("desaturated", "tritanope", "protanope", "deutan"))
+
+demopal(16) |>
+  colorspace::swatchplot(cvd = c("desaturated", "tritanope", "protanope", "deutan"))
+
+demopal2(16) |>
+  colorspace::swatchplot(cvd = c("desaturated", "tritanope", "protanope", "deutan"))
 ```
+Ainda que a uniformidade perceptual está garantida polo procedemento aplicado, non sí a orde. Claramente a luminancia non evoluciona monótona e uniformemente. Isto da lugar a que en percepción monocroma haxa zonas (case a metade da paleta) de baixo contraste e pouco discernimento.
 
-Probemos a ecualizar a paleta igepal_hex2 con 6 cores
+Outro problema que poderá apreciarse, especialmente se o comparamos con paletas coma batlow, grayC, etc, e o baixo rango de luminancia, o que fai que os extremos non estean ben alonxados e haxa pouco contraste entre cor e cor.
 
-```{r}
-#| label: fig-3
-#| fig-cap: "Paleta igepal_hex2"
-#| column: body
-#| out_width: 100%
+Poderíamos seguir experimentando con técnicas para abordar e subsanar estes problemas, pero será custoso en tempo e esforzo investugador.
 
-# Extend the palette igepal_hex2 to 6 colors
-igepal6 <-
-  igepal_hex2 |>
-  extend_palette_equal_ciede2000(
-    n = 6,
-    fixed_hex = "#007bc4",
-    mode = "anchor_exact"
-  )
-pals::pal.bands(igepal6$hex)
-```
+Espero que quede de relevo a dificultade que entraña deseñar unha paleta que cumpra cos estritos criterios establecidos. 
