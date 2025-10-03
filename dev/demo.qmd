@@ -188,10 +188,45 @@ Segundo os estudos máis recentes ao respecto, as características fundamentais 
 
 ## Orde perceptual
 
-#Tentando crear unha paleta que cumpra os requisitos
+# Tentando crear unha paleta que cumpra os requisitos
 
-Partamos das 3 cores básicas da paleta corporativa que establecimos e extendámola mediante as ferramentas recén creadas a un número desexado de cores (p.ex. 16), ecualizando para acadar a uniformidade perceptual. As funcións creadas garanten que a distancia entre cada par de cores no espazo CIELab --ca medida $\Delta$2000-- é estable ao longo de toda a paleta.
+Partamos das 3 cores básicas da paleta corporativa que establecimos e extendámola mediante as ferramentas recén creadas a un número desexado de cores (p.ex. 16), ecualizando para acadar a uniformidade perceptual. As funcións creadas garanten que a distancia entre cada par de cores no espazo CIELab --ca medida $\Delta 2000$-- é estable ao longo de toda a paleta.
 
+```{r}
+#| label: fig-5
+#| fig-cap: "Exemplo paleta interpolada"
+#| column: body
+#| fig-width: 16
+#| fig-height: 10
+#| out-width: 100%
+demoplot(demopal)
+```
+
+Unha segunda variante consiste en aplicar previamente unha interpolación no espazo RGB, para obter tons verdes e violetas na palete
+
+```{r}
+#| label: fig-5
+#| fig-cap: "Exemplo paleta interpolada"
+#| column: body
+#| fig-width: 16
+#| fig-height: 10
+#| out-width: 100%
+demoplot(demopal2)
+```
+Ambas paletas son coloridas e visualmente atractivas, pero examinemos como se visualizarían con daltonismo:
+```{r}
+demopal(16) |>
+  colorspace::swatchplot(cvd = c("desaturated", "tritanope", "protanope", "deutan"))
+
+demopal2(16) |>
+  colorspace::swatchplot(cvd = c("desaturated", "tritanope", "protanope", "deutan"))
+```
+
+Aínda que o resultado é mellor do esperado, ambas presentan o mesmo problema: a luminancia non é monótona, polo que se perde a orde perceptual e ocasiona problemas para os daltónicos.
+```{r}
+```
+
+aa
 ```{r}
 #| label: fig-2
 #| fig-cap: "Paleta batlow"
@@ -296,6 +331,6 @@ plot(gradiente_2$cum_delta_2000)
 plot(gradiente_2$L)
 
 gradiente_2$hex |>
-  colorspace::swatchplot(cvd = c("desaturated"))
+  colorspace::swatchplot(cvd = c("desaturated", "deutan", "tritan", "protan"))
 ```
 
