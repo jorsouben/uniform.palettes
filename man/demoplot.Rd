@@ -7,10 +7,10 @@
 demoplot(pal = demopal, cvd = NULL)
 }
 \arguments{
+\item{pal}{A palette function that returns hex color codes.}
+
 \item{cvd}{Character, optional, indicates the color deficiency to emulate.
 Can be 'protan', 'tritan', 'deutan', or 'desaturate'.}
-
-\item{palette}{A palette function that returns hex color codes.}
 }
 \value{
 A grid of plots demoing the palette.
