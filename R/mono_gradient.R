@@ -11,12 +11,20 @@
 #' @export
 mono_gradient <- function(
     n,
-    from = "#000000",
     ref = igepal_hex[2],
+    from = "#000000",
     to = "#FFFFFF",
     pre_rgb_interpolation = TRUE) {
+  if (pre_rgb_interpolation) {
+    left <- colorRampPalette(c(from, ref), interpolate = "spline", space = "Lab")
+    right <- colorRampPalette(c(ref, to), interpolate = "spline", space = "Lab")
+    m <- round(n / 2)
+    base_colors <- c(left(m), right(m)[-1])
+  } else {
+    base_colors <- c(from, ref, to)
+  }
   extend_palette_equal_ciede2000(
-    c(from, ref, to),
+    base_colors,
     n,
     fixed_hex = ref,
     mode = "anchor_exact"

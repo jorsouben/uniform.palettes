@@ -184,6 +184,10 @@ Segundo os estudos máis recentes ao respecto, as características fundamentais 
 
 ## Uniformidade perceptual
 
+## Inclusividade
+
+## Orde perceptual
+
 #Tentando crear unha paleta que cumpra os requisitos
 
 Partamos das 3 cores básicas da paleta corporativa que establecimos e extendámola mediante as ferramentas recén creadas a un número desexado de cores (p.ex. 16), ecualizando para acadar a uniformidade perceptual. As funcións creadas garanten que a distancia entre cada par de cores no espazo CIELab --ca medida $\Delta$2000-- é estable ao longo de toda a paleta.
@@ -213,8 +217,85 @@ demopal2(16) |>
 ```
 Ainda que a uniformidade perceptual está garantida polo procedemento aplicado, non sí a orde. Claramente a luminancia non evoluciona monótona e uniformemente. Isto da lugar a que en percepción monocroma haxa zonas (case a metade da paleta) de baixo contraste e pouco discernimento.
 
-Outro problema que poderá apreciarse, especialmente se o comparamos con paletas coma batlow, grayC, etc, e o baixo rango de luminancia, o que fai que os extremos non estean ben alonxados e haxa pouco contraste entre cor e cor.
+Outro problema que poderá apreciarse, especialmente se o comparamos con paletas coma batlow, grayC, etc, é o baixo rango de luminancia, o que fai que os extremos non estean ben alonxados e haxa pouco contraste entre cor e cor.
 
-Poderíamos seguir experimentando con técnicas para abordar e subsanar estes problemas, pero será custoso en tempo e esforzo investugador.
+Poderíamos seguir experimentando con técnicas para abordar e subsanar estes problemas, pero será custoso en tempo e esforzo investigador.
 
-Espero que quede de relevo a dificultade que entraña deseñar unha paleta que cumpra cos estritos criterios establecidos. 
+Espero que quede de relevo a dificultade que entraña deseñar unha paleta que cumpra cos estritos criterios establecidos.
+
+# Selección da paleta ou paletas
+
+Dado o enorme investimento que suporía o desenvolvemento dunha paleta personalizada sen garantías absolutas de éxito, o camiño a tomar semella claro: empregar unha ou varias das paletas coidadosamente elaboradas de _Scientific Colour Maps_, dispoñibles para `R` a través do paquete `scico`.
+
+Compre neste punto falar dos distintos tipos de paletas. Polo xeral, poden categorizarse en tipos e clases. Secuenciais, discretas categóricas, diverxentes e cíclicas.
+
+As paletas cíclicas empréganse para datos periódicos e non resultarán polo xeral de aplicación nos datos que o IGE publica.
+
+As paletas categóricas empréganse na representación de datos cun número limitado de categorías diferentes. As paletas deste tipo presentes en _Scientific Colour Maps_ presentan unha ordenación que maximiza o contraste entre as cores empregadas, optimmizando a súa visualización.
+
+As paletas secuenciais son as empregadas para datos continuos; probablemente son as de uso máis habitual.
+
+Para representar datos en desviación respecto a unha media, mediana ou valor de referencia, empréganse as paletas diverxentes. Imaxinemos por exemplo visualizar o crecemento do PIB por países ou comunidades autónomas de xeito que se perciba directamente a desviación respecto da media europea.
+
+Polo tanto, pode ser interesante non ceñirse a unha única paleta, senon seleccionar varias para aplicalas aos distintos tipos de datos, limitándose a dúas ou tres para manter unha consistencia en todo o portal do instituto.
+
+Aínda que, como se dixo, as paletas de datos deben ser independentes da _interface_ web, compre ter en conta a harmonía da primeira ca segunda para evitar disonancias visuais.
+
+Entre as opcións dispoñibles, as paletas `batlow` e `hawaii` destacan por ser moi coloridas e visualmente atractivas.
+
+Con tonalidades principalmente azuis, moi compatibles ca imaxe corporativa, destacan `lapaz`, `davos`, `navia` e `oslo`.
+
+## Gradientes monocor
+Véñanse usando no IGE gradientes monocor. Resulta sinxelo facer que cumpran os requisitos, pero é preciso un procesado adicional.
+
+Ao ter unha soa tonalidade, non teñen inconvintes para as persoas con deficiencias na percepción da cor.
+
+Ao descender da cor base ao branco, ou viceversa, a curva de luminosidade é monótona, garantindo a orde perceptual.
+
+Así e todo, presentan problemas en dúas áreas: uniformidade perceptual e rango de luminosodade.
+
+Para garantir a uniformidade perceptual e preciso cando menos realizar a ecualización das $\Delta$ciede2000.
+
+Cando se xera o gradiente cunha interpolación, lineal ou spline, mediante:
+
+```{r}
+azul_corporativo <- igepal_hex[2]
+
+gradiente <- colorRampPalette(c(azul_corporativo, "white"))(36)
+analise <- hex2palette_info(gradiente)
+deltas <- analise$delta_2000
+luminance <- analise$L
+plot(deltas)
+plot(luminance)
+gradiente |>
+  colorspace::swatchplot(cvd = c("desaturated"))
+```
+esta realízase no espazo de cor RGB, que non é uniformemente perceptual --variacións iguais no espazo tridimensional non se corresponden con variacións iguais de percepción da cor para a visión humana--
+
+```{r}
+gradiente <- colorRampPalette(c(azul_corporativo, "white"))(36)
+
+gradiente_fix <- unipals::extend_palette_equal_ciede2000(
+  gradiente,
+  n = 36
+)
+deltasf <- gradiente_fix$delta_2000
+luminancef <- gradiente_fix$L
+plot(deltasf)
+plot(luminancef)
+gradiente_fix$hex |>
+  colorspace::swatchplot(cvd = c("desaturated"))
+```
+Como pode apreciarse, non existe moita diferencia, pero o rango segue a ser limitante. Para iso creo a función `unipals::mono_gradient()` que, tomando como referencia unha cor, extende o gradiente cara a unhas luminancias mínima e máxima.
+
+```{r}
+gradiente_2 <- mono_gradient(36, ref = azul_corporativo, pre_rgb_interpolation = FALSE)
+
+plot(gradiente_2$delta_2000)
+plot(gradiente_2$cum_delta_2000)
+plot(gradiente_2$L)
+
+gradiente_2$hex |>
+  colorspace::swatchplot(cvd = c("desaturated"))
+```
+
