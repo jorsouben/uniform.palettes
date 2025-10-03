@@ -44,6 +44,19 @@ scale_fill_mipaleta_d_auto <- function(data, var, ...) {
   ggplot2::scale_fill_manual(values = mipaleta(n), ...)
 }
 
+scale_color_mipaleta_d_auto <- function(data, var, ...) {
+  n <- length(unique(data[[var]]))
+  ggplot2::scale_color_manual(values = mipaleta(n), ...)
+}
+
+scale_color_mipaleta_d <- function(n, ...) {
+  ggplot2::scale_color_manual(values = mipaleta(n), ...)
+}
+
+scale_fill_mipaleta_d <- function(n, ...) {
+  ggplot2::scale_fill_manual(values = mipaleta(n), ...)
+}
+
 # ggplot(mpg, aes(x = class, fill = class)) +
 ggplot(mpg, aes(x = class, y = displ, color = displ)) +
   # geom_bar() +
@@ -52,5 +65,5 @@ ggplot(mpg, aes(x = class, y = displ, color = displ)) +
   # scale_fill_manual(values = c("red", "blue", "green", "orange", "purple", "brown", "pink"))
   # scale_fill_manual(values = scico::scico(n = 4, palette = "lajolla"))
   # scale_fill_manual(values = scico::scico(n = 12, palette = "lajolla"))
-  scale_color_mipaleta_c()
+  scale_color_mipaleta_d_auto(mpg, "displ")
 # scale_fill_continuous(values = pal_anchor$hex)
