@@ -1,9 +1,61 @@
-library(R6)
-library(colorspace)
-library(farver)
-library(pals)
-
-ColorPalette <- R6Class("ColorPalette",
+#' ColorMap R6 Class
+#'
+#' An R6 class for storing and converting color palettes across
+#' multiple color spaces (HEX, RGB, LAB). Provides utilities for
+#' distance computation and visualization.
+#'
+#' @docType class
+#' @name ColorMap
+#' @export
+#'
+#' @section Initialization:
+#' \preformatted{
+#' ColorMap$new(colors, space = NULL)
+#' }
+#' Creates a new ColorMap object. If `space` is not provided,
+#' the constructor attempts to autodetect the color space:
+#' \itemize{
+#'   \item Character vector of valid hex codes → `"hex"`
+#'   \item Numeric matrix/data.frame with 3 columns in [0,1] or [0,255] → `"rgb"`
+#'   \item Otherwise defaults to `"lab"`
+#' }
+#'
+#' @param colors Character vector of hex codes, or numeric matrix/data.frame
+#'   with 3 columns representing RGB or LAB values.
+#' @param space Optional. One of `"hex"`, `"rgb"`, or `"lab"`. If `NULL`,
+#'   autodetection is performed.
+#'
+#' @section Fields:
+#' \describe{
+#'   \item{hex}{Private. Character vector of hex codes.}
+#'   \item{rgb}{Private. Numeric matrix of RGB values.}
+#'   \item{lab}{Private. Numeric matrix of LAB values.}
+#' }
+#'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{get_hex()}}{Return hex codes, converting from RGB or LAB if needed.}
+#'   \item{\code{get_rgb()}}{Return RGB values, converting from HEX or LAB if needed.}
+#'   \item{\code{get_lab()}}{Return LAB values, converting from RGB if needed.}
+#'   \item{\code{ciede2000_matrix()}}{Compute pairwise CIEDE2000 distances between colors.}
+#'   \item{\code{deltas()}}{Return sequential deltas along the palette.}
+#'   \item{\code{plot_swatch(cvd = FALSE)}}{Plot a swatch of the palette using \pkg{colorspace}.}
+#'   \item{\code{plot_sineramp()}}{Plot a sine-ramp visualization using \pkg{pals}.}
+#'   \item{\code{plot_colorspace_hcl()}}{Plot the palette in HCL space using \pkg{colorspace}.}
+#' }
+#'
+#' @examples
+#' # From hex codes
+#' pal <- ColorMap$new(c("#FF0000", "#00FF00", "#0000FF"))
+#' pal$get_rgb()
+#' pal$plot_swatch()
+#'
+#' # From RGB matrix
+#' rgb_mat <- matrix(c(255, 0, 0, 0, 255, 0, 0, 0, 255), ncol = 3, byrow = TRUE)
+#' pal2 <- ColorMap$new(rgb_mat, space = "rgb")
+#' pal2$get_lab()
+#'
+ColorMap <- R6::R6Class("ColorMap",
   private = list(
     hex = NULL,
     rgb = NULL,
@@ -59,6 +111,7 @@ ColorPalette <- R6Class("ColorPalette",
         stop("Unsupported color space. Use 'hex', 'rgb', or 'lab'.")
       }
     },
+    # By-color-space values retrieval
     get_hex = function() {
       if (is.null(private$hex)) {
         private$hex <- farver::encode_colour(self$get_rgb())
@@ -70,25 +123,28 @@ ColorPalette <- R6Class("ColorPalette",
         if (!is.null(private$hex)) {
           private$rgb <- farver::decode_colour(private$hex)
         } else if (!is.null(private$lab)) {
-          private$rgb <- convert_colour(private$lab, from = "lab", to = "rgb")
+          private$rgb <- farver::convert_colour(private$lab, from = "lab", to = "rgb")
         }
       }
       private$rgb
     },
     get_lab = function() {
       if (is.null(private$lab)) {
-        private$lab <- convert_colour(self$get_rgb(), from = "rgb", to = "lab")
+        private$lab <- farver::convert_colour(self$get_rgb(), from = "rgb", to = "lab")
       }
       private$lab
     },
+    # Utilities
     ciede2000_matrix = function() {
       lab_vals <- self$get_lab()
       farver::compare_colour(lab_vals, from_space = "lab", method = "CIE2000")
     },
+    deltas = function() {
+      mat <- self$ciede2000_matrix()
+      c(0, mat[cbind(1:(nrow(mat) - 1), 2:ncol(mat))])
+    },
     plot_swatch = function(cvd = FALSE) {
-      # plot_swatch = function() {
       title(main = "My Custom Title")
-      # colorspace::swatchplot(self$get_hex())
       colorspace::swatchplot(self$get_hex(), cvd = cvd)
     },
     plot_sineramp = function() {
@@ -99,61 +155,3 @@ ColorPalette <- R6Class("ColorPalette",
     }
   )
 )
-
-
-# Exemplos
-#
-palbase <- c("#aF0000", "#00fF00", "#0d7cFF")
-# From hex
-# palette1 <- ColorPalette$new(c("#FF0000", "#00FF00", "#0000FF"))
-palette1 <- ColorPalette$new(c("#aF0000", "#00fF00", "#0d7cFF"))
-# palette1$plot_swatch()
-# palette1$plot_sineramp()
-# palette1$ciede2000_distances()
-
-# From RGB
-rgb_matrix <- matrix(c(
-  255, 0, 0,
-  0, 255, 0,
-  0, 0, 255
-), ncol = 3, byrow = TRUE)
-palette2 <- ColorPalette$new(rgb_matrix)
-# palette2 <- ColorPalette$new(rgb_matrix, space = "rgb")
-# palette2$plot_colorspace_hcl()
-
-rgb_matrixb <- matrix(c(
-  0.1, 0, 0,
-  0, 0.5, 0,
-  0, 0, 1
-), ncol = 3, byrow = TRUE)
-palette2b <- ColorPalette$new(rgb_matrixb)
-# From Lab
-lab_matrix <- matrix(c(
-  53.2, 80.1, 67.2,
-  87.7, -86.2, 83.2,
-  32.3, 79.2, -107.9
-), ncol = 3, byrow = TRUE)
-# palette3 <- ColorPalette$new(lab_matrix, space = "lab")
-palette3 <- ColorPalette$new(lab_matrix)
-palette3$plot_swatch()
-
-palette1$get_lab()
-palette1$get_hex() |>
-  decode_colour() |>
-  convert_colour(from = "rgb", to = "lab")
-palbase |>
-  hex2palette_info() |>
-  dplyr::select(L, a, b) |>
-  as.matrix()
-palbase |> hex2palette_info()
-rgb_matrixb |>
-  convert_colour(from = "rgb", to = "lab")
-palette1$ciede2000_distances()
-rgb_matrixb |> encode_colour()
-
-mipal <- ColorPalette$new(igepal_hex)
-mipal$get_lab()
-mipal$plot_colorspace_hcl()
-mipal$plot_swatch()
-mipal$plot_sineramp()
-mipal$ciede2000_matrix()
