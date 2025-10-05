@@ -16,7 +16,7 @@
 #' the constructor attempts to autodetect the color space:
 #' \itemize{
 #'   \item Character vector of valid hex codes → `"hex"`
-#'   \item Numeric matrix/data.frame with 3 columns in [0,1] or [0,255] → `"rgb"`
+#'   \item Numeric matrix/data.frame with 3 columns in `[0,1]` or `[0,255]` → `"rgb"`
 #'   \item Otherwise defaults to `"lab"`
 #' }
 #'
@@ -38,7 +38,8 @@
 #'   \item{\code{get_rgb()}}{Return RGB values, converting from HEX or LAB if needed.}
 #'   \item{\code{get_lab()}}{Return LAB values, converting from RGB if needed.}
 #'   \item{\code{ciede2000_matrix()}}{Compute pairwise CIEDE2000 distances between colors.}
-#'   \item{\code{deltas()}}{Return sequential deltas along the palette.}
+#'   \item{\code{deltas()}}{Return sequential CIEDE2000 deltas along the palette.}
+#'   \item{\code{cum_deltas()}}{Return cummulative CIEDE2000 deltas along the palette.}
 #'   \item{\code{plot_swatch(cvd = FALSE)}}{Plot a swatch of the palette using \pkg{colorspace}.}
 #'   \item{\code{plot_sineramp()}}{Plot a sine-ramp visualization using \pkg{pals}.}
 #'   \item{\code{plot_colorspace_hcl()}}{Plot the palette in HCL space using \pkg{colorspace}.}
@@ -104,9 +105,13 @@ ColorMap <- R6::R6Class("ColorMap",
       if (space == "hex") {
         private$hex <- toupper(colors)
       } else if (space == "rgb") {
-        private$rgb <- colors
+        # private$rgb <- setNames(as.data.frame(colors), nm = c("r", "g", "b"))
+        private$rgb <- as.matrix(colors)
+        colnames(private$rgb) <- c("r", "g", "b")
       } else if (space == "lab") {
-        private$lab <- colors
+        # private$lab <- setNames(as.data.frame(colors), nm = c("l", "a", "b"))
+        private$lab <- as.matrix(colors)
+        colnames(private$lab) <- c("l", "a", "b")
       } else {
         stop("Unsupported color space. Use 'hex', 'rgb', or 'lab'.")
       }
@@ -141,10 +146,16 @@ ColorMap <- R6::R6Class("ColorMap",
     },
     deltas = function() {
       mat <- self$ciede2000_matrix()
+      if (nrow(mat) <= 1) stop("Can't compute deltas for a single colour")
       c(0, mat[cbind(1:(nrow(mat) - 1), 2:ncol(mat))])
     },
+    cum_deltas = function() {
+      cumsum(self$deltas())
+    },
+    L_diff = function() {
+      c(0, diff(self$get_lab()[, "l"]))
+    },
     plot_swatch = function(cvd = FALSE) {
-      title(main = "My Custom Title")
       colorspace::swatchplot(self$get_hex(), cvd = cvd)
     },
     plot_sineramp = function() {

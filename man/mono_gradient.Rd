@@ -5,17 +5,26 @@
 \title{Gradient palette (provisional, need to adjust L channel and correct
 the function extend_palette_equal_ciede2000 for fixed extremes)}
 \usage{
-mono_gradient(n, from = igepal_hex[2], to = "FFFFFF")
+mono_gradient(
+  n,
+  ref = igepal_hex[2],
+  from = "#000000",
+  to = "#FFFFFF",
+  pre_rgb_interpolation = TRUE
+)
 }
 \arguments{
 \item{n, }{Integer, number of output colors}
 
-\item{from}{Character, hex color code of the initial color.}
+\item{ref}{Character, hex color code of the base color. Defaults to 'PANTONE 7461 C'.}
 
-\item{to}{Character, hex color code of the end color. Defaults to 'white'.}
+\item{from}{Character, hex color code of the darkest color. Defaults to 'black'.}
+
+\item{to}{Character, hex color code of the brightest color. Defaults to 'white'.
+#param pre_rgb_interpolation Logical, whether to interpolate in RGB space prior to equalization.}
 }
 \value{
-An equalized color gradient palette in hex format
+An equalized color gradient monocolor palette in hex format
 }
 \description{
 Gradient palette (provisional, need to adjust L channel and correct
