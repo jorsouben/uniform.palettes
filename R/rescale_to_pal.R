@@ -12,9 +12,7 @@
 #' @export
 rescale_to_pal <- function(values, pal, L_direction = FALSE) {
   # Try to generate ColorMap object if an hex vector is passed
-  if (!inherits(pal, "ColorMap")) {
-    pal <- ColorMap$new(pal)
-  }
+  pal <- as_colormap(pal)
 
   deltas <- pal$deltas()
   # Signed ciede2000 deltas

@@ -140,6 +140,12 @@ ColorMap <- R6::R6Class("ColorMap",
       private$lab
     },
     # Utilities
+    match_hex = function(hex_value) {
+      match(toupper(hex_value), self$get_hex())
+    },
+    index = function() {
+      seq_along(self$get_hex())
+    },
     ciede2000_matrix = function() {
       lab_vals <- self$get_lab()
       farver::compare_colour(lab_vals, from_space = "lab", method = "CIE2000")
