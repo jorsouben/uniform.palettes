@@ -149,6 +149,7 @@ ColorMap <- R6::R6Class("ColorMap",
     ciede2000_matrix = function() {
       lab_vals <- self$get_lab()
       farver::compare_colour(lab_vals, from_space = "lab", method = "CIE2000")
+      # farver::compare_colour(lab_vals, from_space = "lab", method = "cie1976")
     },
     deltas = function() {
       mat <- self$ciede2000_matrix()

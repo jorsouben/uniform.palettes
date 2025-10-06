@@ -6,7 +6,6 @@ snap_to_fit <- function(n_out, n_in) {
   n_out - offset
 }
 
-
 # Fits a spline through the given values. By default it ensures the output
 # includes the input points
 channel_interpolation <- function(channel, n_out = 1000L, ensure_fit = TRUE) {
