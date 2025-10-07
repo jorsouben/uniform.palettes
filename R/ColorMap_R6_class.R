@@ -146,18 +146,18 @@ ColorMap <- R6::R6Class("ColorMap",
     index = function() {
       seq_along(self$get_hex())
     },
-    ciede2000_matrix = function() {
+    ciede_matrix = function(method = "cie2000") {
       lab_vals <- self$get_lab()
-      farver::compare_colour(lab_vals, from_space = "lab", method = "CIE2000")
+      farver::compare_colour(lab_vals, from_space = "lab", method = method)
       # farver::compare_colour(lab_vals, from_space = "lab", method = "cie1976")
     },
-    deltas = function() {
-      mat <- self$ciede2000_matrix()
+    deltas = function(method = "cie2000") {
+      mat <- self$ciede_matrix(method)
       if (nrow(mat) <= 1) stop("Can't compute deltas for a single colour")
       c(0, mat[cbind(1:(nrow(mat) - 1), 2:ncol(mat))])
     },
-    cum_deltas = function() {
-      cumsum(self$deltas())
+    cum_deltas = function(method = "cie2000") {
+      cumsum(self$deltas(method))
     },
     L_diff = function() {
       c(0, diff(self$get_lab()[, "l"]))
