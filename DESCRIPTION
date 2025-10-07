@@ -28,7 +28,10 @@ Imports:
     grDevices,
     patchwork,
     colorspace,
-    scico
+    scico,
+    pals,
+    farver,
+    R6
 Suggests:
     usethis,
     testthat (>= 3.0.0)

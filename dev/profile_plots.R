@@ -1,13 +1,15 @@
 pal <- scico::scico(n = 256, palette = "batlow")
 pal <- rainbow(n = 256)
+pal <- jet_colors(256)
 pal <- colorRampPalette(igepal_hex2)(256)
-pal <- colorRampPalette(igepal_hex2, space = "Lab")(256)
+pal <- colorRampPalette(igepal_hex, space = "Lab")(256)
 pal <- unipals::extend_palette_equal_ciede2000(igepal_hex2, 256)$hex
 pals::pal.bands(pal)
 
 plot_volcano_3d(color_palette = pal, bw = TRUE)
 plot_volcano_3d(color_palette = pal, pal_rescale = TRUE, bw = TRUE)
-
+plot_volcano_3d(color_palette = pal, pal_rescale = TRUE)
+plot_volcano_3d()
 rescale_to_pal(volcano, pal) |> head()
 volcano |> head()
 87 * 61
@@ -40,3 +42,6 @@ profile_data |>
     ggplot2::aes(x = x, y = height, color = profile)
   ) +
   ggplot2::geom_line()
+
+induced <-
+  rescale_to_colmap(as.matrix(volcano[, 34]), jetmap, TRUE) |> as.vector()
