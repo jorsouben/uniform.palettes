@@ -1,3 +1,5 @@
 /.quarto/
 demo_files
 *.typ
+presentacion_files
+presentacion.html

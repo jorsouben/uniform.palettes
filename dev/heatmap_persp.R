@@ -29,7 +29,41 @@ heatmap(
   col = jet_colors(256), # Color palette
   # col = scico::scico(n = 100, palette = "batlow"),    # Color palette
   scale = "none", # No scaling of data
-  xlab = "X-axis", # X-axis label
-  ylab = "Y-axis", # Y-axis label
-  main = "Heatmap of Volcano Dataset" # Title
+  # xlab = "X-axis", # X-axis label
+  # ylab = "Y-axis", # Y-axis label
+  # main = "Heatmap of Volcano Dataset" # Title
+  symm = FALSE
 )
+
+
+image(t(volcano), col = jet_colors(256), useRaster = TRUE)
+
+######
+
+# Load required libraries
+library(ggplot2)
+library(reshape2) # for melting the matrix
+
+# Load the volcano dataset
+data(volcano)
+
+# Convert the matrix to a data frame suitable for ggplot2
+volcano_df <- melt(volcano)
+
+# Rename columns for clarity
+colnames(volcano_df) <- c("x", "y", "z")
+
+# Create the heatmap
+ggplot(volcano_df, aes(x = y, y = x, fill = z)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = terrain.colors(256)) +
+  scale_fill_gradientn(colors = as_colormap(batlow_df)$get_hex()) +
+  coord_fixed() + # Ensures correct aspect ratio
+  labs(
+    # title = "Volcano Elevation Heatmap",
+    # x = "X Coordinate",
+    # y = "Y Coordinate",
+    fill = NULL
+  ) +
+  # theme_minimal()
+  theme_void()
