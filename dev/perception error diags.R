@@ -13,7 +13,8 @@
 #  5. Varianzas deltas, cv, rango
 #  6. Revisar funcion equalizacion, que sea correcta. Comparar si es posible con
 #  el método antiguo.
-
+#  Además, poner opcion space que se aplicaría en el resample. (la ecualización
+#  la supnemos en LAb)
 
 percl <- function(pal, medida = "cie2000") {
   pal <- as_colormap(pal)
@@ -97,7 +98,7 @@ testcolors <-
     g = c(0, 0, 100, 205, 0, 0),
     b = c(100, 205, 0, 0, 0, 0)
   )
-# devtools::load_all()
+devtools::load_all()
 testpal <- testcolors |> as_colormap()
 testpal$plot_swatch()
 testpal$deltas()
@@ -107,13 +108,33 @@ testpal$deltas()
 # ;
 # https://support.hunterlab.com/hc/en-us/categories/201319586-Color-Theory
 #
+#
+batpal <- as_colormap(batlow_df)
 # batpal$deltas() |> plot()
 # > batpal$deltas()[-1] |> plot()
 # > batpal$deltas()[-1] |> min()
 # [1] 0.5267951
 # > batpal$deltas()[-1] |> max()
 # [1] 0.5820789
-# > ecuige$deltas()[-1] |> max()
+ecuige <- as_colormap(igepal_hex) |>
+  equalize(256, n_resample = 10000)
+
+ecuige$deltas()[-1] |> plot()
+
+batpal$deltas()[-1] |> plot()
+
+oldeq <-
+  extend_palette_equal_ciede2000(igepal_hex, n = 256, mode = "global")
+
+oldeq$delta_2000 |> plot()
+oldpal <- oldeq |>
+  select(L, a, b) |>
+  as_colormap()
+oldpal$plot_sineramp()
+ecuige$plot_sineramp()
+oldpal$deltas()[-1] |> plot()
+oldpal |> perceptual_error_rms()
+batpal |> perceptual_error_rms()
 # Error: objeto 'ecuige' no encontrado
 # > eqige$deltas()[-1] |> min()
 # [1] 0.4500861
