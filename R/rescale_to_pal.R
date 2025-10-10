@@ -17,7 +17,7 @@ rescale_to_pal <- function(values, pal, L_direction = FALSE) {
   deltas <- pal$deltas()
   # Signed ciede2000 deltas
   if (L_direction) {
-    deltas <- deltas * sign(pal$L_diff())
+    deltas <- deltas * sign(pal$L_deltas())
   }
   cum_diffs <- cumsum(deltas)
   # Normalize input values to [0,1]
@@ -35,7 +35,6 @@ rescale_to_pal <- function(values, pal, L_direction = FALSE) {
     nrow = nrow(values)
   )
 
-  # return(hf_matrix)
   # Apply the height factors to original scale
   values_range <- diff(range(values))
   values_min <- min(values)

@@ -14,17 +14,17 @@
 #' @return A plotly 3D surface plot object
 #' @import plotly
 #' @export
-plot_volcano_3d <- function(pal = scico::scico(256, palette = "bamako"),
-                            show_contours = TRUE,
-                            pal_rescale = FALSE,
-                            z_multiplier = 1L,
-                            signed_deltas = FALSE,
-                            bw = FALSE) {
+volcano_3dplot <- function(
+    pal = scico::scico(256, palette = "batlow"),
+    show_contours = TRUE,
+    pal_rescale = TRUE,
+    z_multiplier = 1L,
+    signed_deltas = TRUE,
+    bw = pal_rescale) {
   # Extract hex vector if ColorMap object is passed
   if (!inherits(pal, "ColorMap")) {
     pal <- pal |> as_colormap()
   }
-
   volcano <- datasets::volcano
 
   # Create sequence for x and y coordinates in meters (10m grid)
@@ -39,10 +39,11 @@ plot_volcano_3d <- function(pal = scico::scico(256, palette = "bamako"),
   }
 
   if (bw) {
-    pal <-
-      scico::scico(n = length(pal$index), palette = "grayC")
+    plot_pal <-
+      scico::scico(n = length(pal$index()), palette = "bamako")
+  } else {
+    plot_pal <- pal$get_hex()
   }
-
   # Create the plot with contours included
   p <- plotly::plot_ly(
     type = "surface",
@@ -50,7 +51,7 @@ plot_volcano_3d <- function(pal = scico::scico(256, palette = "bamako"),
     y = ~y_seq,
     z = ~z_values,
     # colorsale = colorscale,
-    colors = pal$get_hex(),
+    colors = plot_pal,
     showscale = TRUE,
     contours = if (show_contours) {
       list(

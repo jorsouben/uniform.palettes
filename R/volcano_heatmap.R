@@ -20,15 +20,15 @@ volcano_heatmap <- function(pal = batlow_df) {
       values_to = "z",
       names_transform = list(y = as.integer)
     ) |>
-    mutate(x = as.integer(x))
+    dplyr::mutate(x = as.integer(x))
 
   # Create the heatmap
-  ggplot(volcano_df, aes(x = y, y = x, fill = z)) +
-    geom_tile() +
-    scale_fill_gradientn(colors = pal) +
-    coord_fixed() + # Ensures correct aspect ratio
-    labs(
+  ggplot2::ggplot(volcano_df, aes(x = y, y = x, fill = z)) +
+    ggplot2::geom_tile() +
+    ggplot2::scale_fill_gradientn(colors = pal) +
+    ggplot2::coord_fixed() + # Ensures correct aspect ratio
+    ggplot2::labs(
       fill = "Elevation (m)"
     ) +
-    theme_void()
+    ggplot2::theme_void()
 }
