@@ -162,14 +162,17 @@ ColorMap <- R6::R6Class("ColorMap",
     L_diff = function() {
       c(0, diff(self$get_lab()[, "l"]))
     },
-    plot_swatch = function(cvd = FALSE) {
-      colorspace::swatchplot(self$get_hex(), cvd = cvd)
+    swatch = function(cvd = FALSE, ...) {
+      colorspace::swatchplot(self$get_hex(), cvd = cvd, ...)
     },
-    plot_sineramp = function() {
-      pals::pal.sineramp(self$get_hex(), main = "Sine Ramp")
+    bands = function(...) {
+      pals::pal.bands(self$get_hex(), ...)
     },
-    plot_colorspace_hcl = function() {
-      colorspace::hclplot(self$get_hex(), main = "HCL Plot")
-    }
+    sineramp = function(...) {
+      pals::pal.bands(self$get_hex(), ...)
+    } # ,
+    # plot_colorspace_hcl = function() {
+    #   colorspace::hclplot(self$get_hex(), main = "HCL Plot")
+    # }
   )
 )

@@ -1,71 +1,227 @@
 ---
 title: "Mapas de Cor"
-author: "Jordán Soubrier"
+author:
+  name: "Jordán Soubrier"
+  affiliation: "Instituto Galego de Estatística"
+
 format:
   revealjs:
     incremental: true
+    center: true
+    code-line-numbers: false
+    highlight-style: monokai
+
 editor: source
 ---
+```{r}
+devtools::load_all()
+```
 
-## Quarto
+## Motivación
 
- <https://quarto.org/docs/presentations/>.
+Esta viaxe comeza cunha solicitude aparentemente sinxela: Preparar unha nova paleta de cores para o Instituto.
+
+Recordei inmediatamente un interesante artigo que tiña reservado para ler:
+
+[Crameri, F., G.E. Shephard, and P.J. Heron (2020), *The misuse of colour in science communication*.](https://rdcu.be/b9lm1 "Fabio Crameri. The misuse of color in science communication")
+
+Este resulta ser unha excelente porta de entrada a esta problemática ademáis de conducir a outras lecturas de grande utilidade.
+
+## Primeiros pasos
+
+A primeira conclusión rotunda é que a paleta --ou mapa-- de cores empregada na visualización de datos debe ser unha entidade separada da imaxe corporativa, dos elementos visuais da web, revistas, publicacións... Así e todo, pode buscarse unha harmonía entre ambas seleccións de cores.
+
+A segunda e máis importante: As mapas de cores aplicadas aos datos deben ser científicas.
 
 ## Mapas de cores científicos
 
-A presentación de datos científicos debe facerse sen introducir 'features' artificiais ou eliminar detalles reais, ademáis de ser universalmente lexible.
-
-## Unha paleta jet
-
-```{r}
-devtools::load_all()
-jetpal <- jet_colors(256) |> as_colormap()
-
-demoplot(jet_colors)
-# demoplot(jet_colors, cvd = "desaturate")
-# demoplot(jet_colors, cvd = "protan")
-jetpal$plot_swatch(cvd = c("desaturate", "protan", "tritan", "deutan"))
-```
-## Rainbow
-
-```{r}
-rainbowpal <- rainbow(256) |> as_colormap()
-rainbowpal$plot_swatch(cvd = c("desaturate", "protan", "tritan", "deutan"))
-```
-
+A presentación de datos científicos debe facerse sen introducir características ('features') artificiais ou eliminar detalles reais, ademáis de ser universalmente lexible. Non debe distorsionar os datos e ten que transmitir verazmente a realidade destes.
 
 ## Propiedades desexables
 
 Polo tanto, unha paleta de cor axeitada para a difusión científica de datos --ou simplemente para unha comunicación visual **non distorsionada** de datos-- debe ter estas propiedades:
 
-- Uniformidade perceptual
-- Inclusividade das persoas con *deficiencias na percepción da cor*.
-- Ordeación perceptual
-- Lexibilidade en monocromo.
-- Reproducibilidade e Citabilidade.
+-   Uniformidade perceptual
+-   Inclusividade das persoas con *deficiencias na percepción da cor*.
+-   Orde perceptual
+-   Lexibilidade en monocromo.
+-   Reproducibilidade e Citabilidade.
 
 ## Uniformidade Perceptual
 
 Unha paleta **perceptualmente uniforme** pondera de xeito idéntico unha mesma variación en todo o espazo de datos.
 
+As distancias entre puntos de datos e as cores correspondentes deben seguir unha proporción constante.
 
+Pero, como medimos as distancias entre cores?
 
-When you click the **Render** button a document will be generated that includes:
+## Ferramentas para o estudo
 
--   Content authored with markdown
--   Output from executable code
+Antes de continuar fagamos unha pausa para falar das ferramentas que imos precisas para seguir co estudo.
 
-## Code
+Precisaremos:
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+-   medicións desas distancias perceptuais das que falamos.
+-   conversións entre espazos de cor.
+-   representacións gráficas das paletas.
+-   gráficos de exemplo empregando as paletas.
+-   análise das canles de cor
+-   evaluación matemática do 'erro visual' introducido polas distintas paletas de cor.
+
+## Librarías de R útiles para o estudo dos mapas de cor
+
+-   **`farver`**: Excelente set de ferramentas de conversión e manipulación.
+-   **`pals`**:: Colección de paletas, principalmemente baseadas nas publicacións de **Peter Kovesi**, e utilidades de diagnose numérica e visual.
+-   **`colorspace`**:: Colección de mapas de cor uniformes *no espazo HCL* e utilidades de conversión e diagnose. Destaca a simulación de 'CVDs' --Deficiencias da percepción da cor--
+
+## Paquete unipals
+
+Os paquetes antes mencionados non proporcionan asi e todo unha forma de crear paletas uniformes desde cero, senon que proporcionan ferramentas para evalualas.
+
+Tampoco contan con métodos para replicar as análises de Fabio Crameri nin facer algunhas das representacións visuais desexadas.
+
+Polo tanto, para o desenvolvemento deste proxecto, comecei a escribir un sixelo paquete, `unipals`; moi rudimentario pero que simplifica o meu proceso exploratorio.
+
+## Paquete unipals: a clase `ColorMap`
+
+Despois de crear funcións de conversión, interpolación, etc., decateime de que non tiña a flexibilidade suficiente. Virei entón a definir unha clase `R6` como base.
+
+As instancias desta clase, `ColorMap`, poden xenerarse a partires dun vector de códigos hexadecimais ou unha `matrix`, `data.frame` (ou `tibble`) de cores RGB ou LAB.
+
+Con métodos para calcular as distancias e erro perceptuais, conversión e representación gráfica, facilitouse o meu fluxo de traballo significativamente.
+
+[`unipals: https://github.com/jorsouben/uniform.palettes`](https://github.com/jorsouben/uniform.palettes)
+
+## Espazos de cor: RGB
+
+O espazo RGB é un modelo de cor baseado na combinación de tres cores primarias de luz: vermello (Red), verde (Green) e azul (Blue). Cada cor represéntase como unha tripla de valores entre 0 e 255 ou 0 e 1, e é usado principalmente en pantallas e dispositivos dixitais para representar cores mediante luz.
+
+## Espazos de cor: RGB. Un exemplo
+:::: {.colums}
+
+::: {.column width="40%"}
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+  
+pares <- matrix(
+  c(
+    30, 255,   0,
+    10, 255,   0,
+     0, 230, 255,
+     0, 210, 255
+  ),
+  ncol = 3,
+  byrow = TRUE
+) |>
+  as_colormap()
+```
+:::
+
+::: {.fragment .column width="60%"}
+```{r}
+#| echo: TRUE
+#| output-location: fragment
+
+pares$bands()
+```
+:::
+
+::::
+
+Estes dous pares de cores están separados pola mesma distancia --euclídea--, 20 unidades no espazo RGB.
+
+::: {.fragment}
+Pero baixo a nosa ollada o par azul diferenciase claramente mentres que os verdes son indiscernibles.
+:::
+
+## Espazos de cor: RGB
+
+A distancia no espazo RGB non reflicte ben a percepción visual humana porque este modelo é lineal e técnico, mentres que a nosa visión é non lineal e sensitiva a certos cambios de cor máis que a outros.
+
+**RGB non é perceptualmente uniforme**: Un cambio pequeno en RGB pode percibirse como moi grande ou moi pequeno dependendo da zona do espectro.
+
+Por iso nunca debe usarse
+
+```r
+colorRampPalette(vector_de_cores)
+```
+para definir unha paleta se pretendemos que sexa perceptualmente uniforme.
+
+## Espazos de cor: HCL
+
+O espazo de cor HCL (Hue, Chroma, Luminance) é un modelo perceptualmente uniforme que representa as cores segundo tres atributos que se corresponden coa percepción humana:
+
+::: {.nonincremental}
+- Hue (Matiz): tipo de cor (vermello, azul, verde…).
+- Chroma (Croma): intensidade ou saturación da cor.
+- Luminance (Luminosidade): claridade ou escuridade da cor.
+:::
+
+Este modelo é especialmente útil en visualización de datos porque permite crear paletas de cores que manteñen a uniformidade perceptiva, evitando distorsións visuais que aparecen en modelos como RGB ou HSV
+
+## Espazos de cor: HCL. O paquete `colorspace`
+
+O paquete `colorspace` enfócase na análise de mapas de cores no espazo HCL. Ofrece varias ferramentas que incorporo no meu fluxo de traballo así como unha colección de paletas uniformes **no espazo HCL**.
+
+Estas paletas son boas opcións, pero non seguen exactamente os criterios dos "Scientific Colour Maps" dos que falaremos a continuación.
+
+## Espazos de cor: CIE Lab
+
+O espazo CIELAB (CIE 1976 L*, a*, b*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
+
+L*: luminosidade (de negro a branco, 0 a 100).
+a*: eixo verde-vermelho (valores negativos → verde, positivos → vermello).
+b*: eixo azul-amarelo (valores negativos → azul, positivos → amarelo).
+
+Este modelo é independente do dispositivo, o que permite comparar cores de forma consistente entre diferentes sistemas (pantallas, impresoras, etc.)
+
+## Espazos de cor: CIE Lab. Medidas de distancia
+
+O espazo Lab elaborouse realizando experimentos con humanos, definindo o "observador promedio" a partires das probas.
+
+- ΔE*ab (CIE76): Dado que o espazo de deseñou para ser uniforme, a fórmula orixinal para medir a distancia era simplemente a distancia euclidiana entre dous puntos no espazo LAB.
+
+- ΔE00 (CIEDE2000): Posteriormente desenvolveuse unha fórmula mellorada que incorpora correccións para representar mellor as diferenzas reais percibidas polo ollo humano.
+
+## Scientific Colour Maps
+
+Os 'Scientific Colour Maps' son unha colección de paletas deseñadas por Fabio Crameri, seguindo todos os principios que mencionamos inicialmente: uniformidade perceptual, inclusividade, orde perceptual, ...
+
+A diagnose destas realízase no espazo Lab, empregando principalmente a medida CIEDE2000.
+
+## Creando unha paleta: Selección inicial de cores
+
+Un dos requisitos iniciais ao deseñar unha paleta de cores para o IGE era incluír o *azul corporativo* da Xunta de Galicia.
+
+Deseñar tan só un gradiente monocolor resulta aburrido, polo que engadimos dúas cores: un vermello similar ao presente na bandeira de Galicia e o vermello da Unión Europea.
 
 ```{r}
-devtools::load_all()
+
+paleta <- 
+igepal_hex |> 
+  ColorMap$new()
+
+paleta$bands()
+```
+## Creando unha paleta: Extendendo a gama
+
+Pouco podemos facer con tan só tres cores, polo que tentaremos crear un gradiente entre elas.
+
+```{r}
+nova_paleta <- function(n) {
+map_resample(paleta, space = "lab", n_out = 32)
+}
+
+nova_paleta(32)$deltas() |> plot()
 ```
 
 ## Test plot
 
 ```{r}
+
+rainbowpal <- rainbow(256) |> as_colormap()
+jetpal <- jet_colors(256) |> as_colormap()
 plot_volcano_3d(bw = TRUE)
 ```
 
@@ -76,13 +232,35 @@ plot_volcano_3d(color_palette = jetpal , pal_rescale = TRUE,bw = TRUE)
 ```
 
 ## Con rainbow
+
 ```{r}
 plot_volcano_3d(color_palette = rainbowpal , pal_rescale = TRUE,bw = TRUE)
 ```
+
 ## Teñamos en conta o sentido da Luminancia
 
 Sen embargo se temos en conta que o gradiente de luminosidade inflúe na orde percibida e aplicamos isto ao rescalado:
 
 ```{r}
 plot_volcano_3d(color_palette = jetpal , pal_rescale = TRUE, signed_deltas = TRUE, bw = TRUE)
+```
+
+## Dous mapas de cor moi diferentes
+
+```{r}
+
+# demoplot(jet_colors)
+# demoplot(jet_colors, cvd = "desaturate")
+# demoplot(jet_colors, cvd = "protan")
+# jetpal$plot_swatch(cvd = c("desaturate", "protan", "tritan", "deutan"))
+# jetpal$plot_sineramp(main = "jet")
+pals::pal.sineramp(jet_colors(256), main = "Paleta 'jet' (Matlab)")
+pals::pal.sineramp(pals::viridis(256), main = "Paleta 'viridis'")
+```
+
+## Rainbow
+
+```{r}
+rainbowpal <- rainbow(256) |> as_colormap()
+rainbowpal$swatch(cvd = c("desaturate", "protan", "tritan", "deutan"))
 ```
