@@ -1,5 +1,6 @@
 #' CIEDE2000 distance between two Lab rows
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param lab_i Numeric length-3 vector (L, a, b) for color i.
 #' @param lab_j Numeric length-3 vector (L, a, b) for color j.
 #'
@@ -21,6 +22,7 @@ delta2000_pair <- function(lab_i, lab_j) {
 
 #' Sequential CIEDE2000 deltas along a Lab path
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param lab_matrix Numeric matrix with columns L, a, b (rows are points along
 #' a path).
 #'
@@ -40,6 +42,7 @@ delta2000_seq <- function(lab_matrix) {
 
 #' Linear interpolation between two Lab points
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param lab1 Numeric length-3 vector (L, a, b).
 #' @param lab2 Numeric length-3 vector (L, a, b).
 #' @param t Numeric in `[0, 1]`, interpolation parameter.
@@ -52,6 +55,7 @@ lab_lerp <- function(lab1, lab2, t) {
 
 #' Dense CIEDE2000 arc-length sampling over a Lab polyline
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param lab_controls Numeric matrix with columns L, a, b; base control points
 #' in order.
 #' @param samples_per_segment Integer, number of sub-intervals per segment
@@ -99,6 +103,7 @@ lab_path_sample <- function(lab_controls, samples_per_segment = 200L) {
 #' Invert cumulative arc-length to Lab points at target distances
 #' ("Equalize" deltas)
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param sampling Output of lab_path_sample().
 #' @param targets Numeric vector of target cumulative lengths
 #' (must be within `[0, total_length]`).
@@ -141,6 +146,7 @@ lab_path_at_cumlen <- function(sampling, targets) {
 
 #' Resample a Lab polyline to n points with CIEDE2000 spacing
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param lab_controls Matrix of control points (L,a,b) in order.
 #' @param n Integer, number of output points.
 #' @param anchor_index Optional integer index in lab_controls to fix exactly.
@@ -209,6 +215,7 @@ resample_lab_equal_ciede2000 <- function(lab_controls, n,
 
 #' Extend a base HEX palette to n colors with uniform CIEDE2000 spacing
 #'
+#' @deprecated Use `ColorMap` methods
 #' @param hex_base Character vector of base HEX colors in order.
 #' @param n Integer, desired length of the extended palette.
 #' @param fixed_hex Optional HEX of a base color to keep exactly fixed.

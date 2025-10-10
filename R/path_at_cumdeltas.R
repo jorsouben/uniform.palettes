@@ -7,17 +7,9 @@
 #' @return Matrix of Lab points at target positions.
 #' @export
 path_at_cumdeltas <- function(inputs, targets) {
-  # labs <- sampling$labs
-  # cumlen <- sampling$cumlen
   n <- length(targets)
-  # out <- matrix(NA_real_,
-  #   nrow = n, ncol = 3L,
-  #   dimnames = list(NULL, c("L", "a", "b"))
-  # )
   out <- c()
   total <- tail(inputs, 1L)
-  # Clamp targets to [0, total] to avoid edge issues
-  # targets <- pmin(pmax(targets, 0), total)
 
   for (i in seq_len(n)) {
     tlen <- targets[i]
