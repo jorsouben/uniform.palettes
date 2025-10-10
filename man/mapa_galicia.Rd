@@ -8,7 +8,7 @@
 A shapefile with associated \code{.dbf}, \code{.shx}, and \code{.prj} files.
 }
 \source{
-Created manually for package illustration.
+© Instituto Geográfico Nacional
 }
 \description{
 This is a shapefile included in the package under \verb{inst/extdata/map/}.

@@ -9,7 +9,6 @@
 #' @returns Integer, corrected `n_out`
 #' @export
 #'
-#' @examples
 snap_to_fit <- function(n_out, n_in) {
   steps <- n_in - 1
   offset <- (n_out - n_in) %% steps
