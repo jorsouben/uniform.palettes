@@ -54,6 +54,7 @@ the constructor attempts to autodetect the color space:
 \code{deltas()},
 \code{cum_deltas()},
 \code{L_deltas()}
+\code{perceptual_error()}
 }{Distance-related utilities}
 \item{
 \code{swatch()},
@@ -87,6 +88,7 @@ pal2$get_lab()
 \item \href{#method-ColorMap-deltas}{\code{ColorMap$deltas()}}
 \item \href{#method-ColorMap-cum_deltas}{\code{ColorMap$cum_deltas()}}
 \item \href{#method-ColorMap-L_deltas}{\code{ColorMap$L_deltas()}}
+\item \href{#method-ColorMap-perceptual_error}{\code{ColorMap$perceptual_error()}}
 \item \href{#method-ColorMap-swatch}{\code{ColorMap$swatch()}}
 \item \href{#method-ColorMap-bands}{\code{ColorMap$bands()}}
 \item \href{#method-ColorMap-sineramp}{\code{ColorMap$sineramp()}}
@@ -228,6 +230,18 @@ Return cumulative deltas
 Return the deltas of the Lightness channel
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ColorMap$L_deltas()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ColorMap-perceptual_error"></a>}}
+\if{latex}{\out{\hypertarget{method-ColorMap-perceptual_error}{}}}
+\subsection{Method \code{perceptual_error()}}{
+Calculate RMS visual error
+Calculates the square root of the mean of the square
+deviations from the ideal cummulative deltas
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ColorMap$perceptual_error()}\if{html}{\out{</div>}}
 }
 
 }

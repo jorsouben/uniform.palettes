@@ -1,7 +1,7 @@
 #' Plot the volcano dataset in 3D using plotly
 #'
-#' @param color_palette Character vector of hex colors for the surface gradient.
-#'   Defaults to "terra" palette which is good for terrain visualization.
+#' @param pal Vector of hex colour codes, matrix or data.frame
+#'   Defaults to Scientific Colour Maps: "bamako"
 #' @param show_contours Logical, whether to show contour lines (default = TRUE)
 #' @param pal_rescale Logical, whether to rescale heights based on perceptual
 #'   differences in the palette (default = FALSE)
@@ -14,16 +14,18 @@
 #' @return A plotly 3D surface plot object
 #' @import plotly
 #' @export
-plot_volcano_3d <- function(color_palette = terrain.colors(256),
+plot_volcano_3d <- function(pal = scico::scico(256, palette = "bamako"),
                             show_contours = TRUE,
                             pal_rescale = FALSE,
                             z_multiplier = 1L,
                             signed_deltas = FALSE,
                             bw = FALSE) {
   # Extract hex vector if ColorMap object is passed
-  if (inherits(color_palette, "ColorMap")) {
-    color_palette <- color_palette$get_hex()
+  if (!inherits(pal, "ColorMap")) {
+    pal <- pal |> as_colormap()
   }
+
+  volcano <- datasets::volcano
 
   # Create sequence for x and y coordinates in meters (10m grid)
   x_seq <- (seq_len(ncol(volcano)) - 0.5) * 10
@@ -31,14 +33,14 @@ plot_volcano_3d <- function(color_palette = terrain.colors(256),
 
   # Prepare Z values
   z_values <- if (pal_rescale) {
-    rescale_to_pal(volcano, color_palette, L_direction = signed_deltas)
+    rescale_to_pal(volcano, pal, L_direction = signed_deltas)
   } else {
     volcano
   }
 
   if (bw) {
-    color_palette <-
-      scico::scico(n = length(color_palette), palette = "grayC")
+    pal <-
+      scico::scico(n = length(pal$index), palette = "grayC")
   }
 
   # Create the plot with contours included
@@ -48,7 +50,7 @@ plot_volcano_3d <- function(color_palette = terrain.colors(256),
     y = ~y_seq,
     z = ~z_values,
     # colorsale = colorscale,
-    colors = color_palette,
+    colors = pal$get_hex(),
     showscale = TRUE,
     contours = if (show_contours) {
       list(
@@ -81,13 +83,9 @@ plot_volcano_3d <- function(color_palette = terrain.colors(256),
     scene = list(
       width = 960,
       height = 540,
-      # autosize = TRUE,
       autosize = FALSE,
       camera = list(
         eye = list(x = 0.85, y = 0.55, z = 0.35),
-        # eye = list(x = 1.5, y = 0, z = 0),
-        # up = list(x = 0, y = 0, z = 1),
-        # eye = list(x = 0.87 * x_scale, y = 0.87 * y_scale, z = 0.87),
         center = list(x = 0, y = 0, z = -0.2)
       ),
       aspectmode = "manual",
@@ -98,19 +96,15 @@ plot_volcano_3d <- function(color_palette = terrain.colors(256),
       ),
       xaxis = list(
         title = "X (meters)" # ,
-        # range = c(min(x_seq), max(x_seq))
       ),
       yaxis = list(
         title = "Y (meters)" # ,
-        # range = c(min(y_seq), max(y_seq))
       ),
       zaxis = list(
         title = "Elevation (meters)" # ,
-        # range = c(min(z_values), max(z_values))
       )
     ),
     margin = list(l = 10, r = 5, b = 0, t = 30),
-    # margin = list(t = 40),
     title = "Volcano Dataset 3D Visualization"
   )
 }

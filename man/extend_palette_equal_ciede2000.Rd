@@ -27,5 +27,5 @@ extend_palette_equal_ciede2000(
 Tibble with name, hex, red, green, blue, L, a, b, delta_2000, cum_delta_2000.
 }
 \description{
-Extend a base HEX palette to n colors with uniform CIEDE2000 spacing
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

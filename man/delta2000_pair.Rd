@@ -15,5 +15,5 @@ delta2000_pair(lab_i, lab_j)
 Numeric scalar, Delta E 2000.
 }
 \description{
-CIEDE2000 distance between two Lab rows
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

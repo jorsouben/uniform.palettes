@@ -23,5 +23,5 @@ A list with:
 }
 }
 \description{
-Dense CIEDE2000 arc-length sampling over a Lab polyline
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

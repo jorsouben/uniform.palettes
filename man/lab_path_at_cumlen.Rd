@@ -17,6 +17,5 @@ lab_path_at_cumlen(sampling, targets)
 Matrix of Lab points at target positions.
 }
 \description{
-Invert cumulative arc-length to Lab points at target distances
-("Equalize" deltas)
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

@@ -10,8 +10,8 @@ persp(
   # ylim = c(1, nrow(volcano)) * 10,
   # zlim = range(volcano),
   # ylim = range(y),
-  theta = 0, # Angle of rotation around the z-axis
-  phi = 90, # Angle of elevation
+  theta = 30, # Angle of rotation around the z-axis
+  phi = 30, # Angle of elevation
   expand = 0.5, # Scaling factor
   col = "lightblue", # Color of the surface
   border = "grey", # Border color
@@ -53,17 +53,25 @@ volcano_df <- melt(volcano)
 # Rename columns for clarity
 colnames(volcano_df) <- c("x", "y", "z")
 
+volcano_df <- volcano |> tibble::as_tibble()
+volcano_df <- tibble::as_tibble(volcano, .name_repair = ~ as.character(seq_along(.)))
+
+volcano_df <- volcano |>
+  tibble::as_tibble(.name_repair = ~ as.character(seq_along(.))) |>
+  tibble::rowid_to_column(var = "x") |>
+  tidyr::pivot_longer(
+    cols = -x,
+    names_to = "y",
+    values_to = "z",
+    names_transform = list(y = as.integer)
+  ) |>
+  mutate(x = as.integer(x))
 # Create the heatmap
 ggplot(volcano_df, aes(x = y, y = x, fill = z)) +
   geom_tile() +
-  scale_fill_gradientn(colors = terrain.colors(256)) +
   scale_fill_gradientn(colors = as_colormap(batlow_df)$get_hex()) +
   coord_fixed() + # Ensures correct aspect ratio
   labs(
-    # title = "Volcano Elevation Heatmap",
-    # x = "X Coordinate",
-    # y = "Y Coordinate",
-    fill = NULL
+    fill = "Elevation (m)"
   ) +
-  # theme_minimal()
   theme_void()

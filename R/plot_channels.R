@@ -1,3 +1,14 @@
+#' Plot channels
+#'
+#' @description
+#' Create a line plot of the channels in the selected space using `ggplot2`
+#'
+#' @param pal Vector of hex colour codes, matrix or data.frame
+#' @param space One of "lab" or "rgb"
+#'
+#' @returns NULL
+#' @export
+#'
 plot_channels <- function(pal, space = c("lab", "rgb")) {
   pal <- as_colormap(pal)
   pal$get_lab() |>

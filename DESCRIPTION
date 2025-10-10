@@ -31,7 +31,8 @@ Imports:
     scico,
     pals,
     farver,
-    R6
+    R6,
+    plotly
 Suggests:
     usethis,
     testthat (>= 3.0.0)

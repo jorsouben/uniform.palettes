@@ -48,6 +48,7 @@
 #'     \code{deltas()},
 #'     \code{cum_deltas()},
 #'     \code{L_deltas()}
+#'     \code{perceptual_error()}
 #'   }{Distance-related utilities}
 #'   \item{
 #'     \code{swatch()},
@@ -173,6 +174,22 @@ ColorMap <- R6::R6Class("ColorMap",
     #' @description Return the deltas of the Lightness channel
     L_deltas = function() {
       c(0, diff(self$get_lab()[, "l"]))
+    },
+    #' @description Calculate RMS visual error
+    #' Calculates the square root of the mean of the square
+    #' deviations from the ideal cummulative deltas
+    perceptual_error = function() {
+      deltas <- self$deltas()[-1]
+      n <- length(deltas)
+      # cumulative perceptual distances
+      cum_actual <- self$cum_deltas()[-1]
+      total <- tail(cum_actual, 1L)
+      # ideal straight line
+      cum_ideal <- seq(from = total / n, by = total / n, length.out = n)
+      # RMS deviation of cumulative curve from ideal
+      rms <- sqrt(mean((cum_actual - cum_ideal)^2))
+      perr <- rms / total * 100
+      return(perr)
     },
 
     # Utilities: Swatch plots

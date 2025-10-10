@@ -32,5 +32,5 @@ resample_lab_equal_ciede2000(
 Matrix of Lab with n rows and columns L,a,b.
 }
 \description{
-Resample a Lab polyline to n points with CIEDE2000 spacing
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

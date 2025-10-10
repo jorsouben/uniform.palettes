@@ -15,5 +15,5 @@ Numeric vector of length nrow(lab_matrix) with NA for the first, then
 consecutive deltas.
 }
 \description{
-Sequential CIEDE2000 deltas along a Lab path
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

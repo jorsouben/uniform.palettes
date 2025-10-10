@@ -17,5 +17,5 @@ lab_lerp(lab1, lab2, t)
 Numeric length-3 vector at parameter t.
 }
 \description{
-Linear interpolation between two Lab points
+\strong{Deprecated}. Use \code{ColorMap} methods
 }

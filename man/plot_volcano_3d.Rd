@@ -5,7 +5,7 @@
 \title{Plot the volcano dataset in 3D using plotly}
 \usage{
 plot_volcano_3d(
-  color_palette = terrain.colors(256),
+  pal = scico::scico(256, palette = "bamako"),
   show_contours = TRUE,
   pal_rescale = FALSE,
   z_multiplier = 1L,
@@ -14,8 +14,8 @@ plot_volcano_3d(
 )
 }
 \arguments{
-\item{color_palette}{Character vector of hex colors for the surface gradient.
-Defaults to "terra" palette which is good for terrain visualization.}
+\item{pal}{Vector of hex colour codes, matrix or data.frame
+Defaults to Scientific Colour Maps: "bamako"}
 
 \item{show_contours}{Logical, whether to show contour lines (default = TRUE)}
 
