@@ -1,4 +1,10 @@
-# Function to generate MATLAB-style 'jet' colormap
+#' The `jet` colormap
+#'
+#' @param n Integer, number of output colors
+#'
+#' @returns Character vector of hex color codes
+#' @export
+#'
 jet_colors <- function(n) {
   colorRampPalette(
     c(

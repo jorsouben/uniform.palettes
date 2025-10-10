@@ -149,7 +149,6 @@ ColorMap <- R6::R6Class("ColorMap",
     ciede_matrix = function(method = "cie2000") {
       lab_vals <- self$get_lab()
       farver::compare_colour(lab_vals, from_space = "lab", method = method)
-      # farver::compare_colour(lab_vals, from_space = "lab", method = "cie1976")
     },
     deltas = function(method = "cie2000") {
       mat <- self$ciede_matrix(method)
@@ -170,9 +169,6 @@ ColorMap <- R6::R6Class("ColorMap",
     },
     sineramp = function(...) {
       pals::pal.bands(self$get_hex(), ...)
-    } # ,
-    # plot_colorspace_hcl = function() {
-    #   colorspace::hclplot(self$get_hex(), main = "HCL Plot")
-    # }
+    }
   )
 )

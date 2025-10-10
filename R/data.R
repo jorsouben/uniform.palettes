@@ -36,7 +36,7 @@
 #' ```
 #'
 #' @format A shapefile with associated `.dbf`, `.shx`, and `.prj` files.
-#' @source Created manually for package illustration.
+#' @source © Instituto Geográfico Nacional
 #' @name mapa_galicia
 #' @docType data
 NULL
