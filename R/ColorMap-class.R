@@ -34,9 +34,26 @@
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{get_hex()}}{Return hex codes, converting from RGB or LAB if needed.}
-#'   \item{\code{get_rgb()}}{Return RGB values, converting from HEX or LAB if needed.}
-#'   \item{\code{get_lab()}}{Return LAB values, converting from RGB if needed.}
+#'   \item{
+#'     \code{get_hex()},
+#'     \code{get_rgb()},
+#'     \code{get_lab()}
+#'   }{Retrieve color values in different spaces}
+#'   \item{
+#'     \code{match_hex()},
+#'     \code{index()}
+#'   }{Color indexing utilities}
+#'   \item{
+#'     \code{ciede_matrix()},
+#'     \code{deltas()},
+#'     \code{cum_deltas()},
+#'     \code{L_deltas()}
+#'   }{Distance-related utilities}
+#'   \item{
+#'     \code{swatch()},
+#'     \code{bands()},
+#'     \code{sineramp()}
+#'   }{Palette visualization}
 #' }
 #'
 #' @examples
@@ -119,37 +136,62 @@ ColorMap <- R6::R6Class("ColorMap",
         private$lab <- farver::convert_colour(self$get_rgb(), from = "rgb", to = "lab")
       }
       private$lab
-    } # ,
-    # Utilities
-    # match_hex = function(hex_value) {
-    #   match(toupper(hex_value), self$get_hex())
-    # },
-    # index = function() {
-    #   seq_along(self$get_hex())
-    # },
-    # ciede_matrix = function(method = "cie2000") {
-    #   lab_vals <- self$get_lab()
-    #   farver::compare_colour(lab_vals, from_space = "lab", method = method)
-    # },
-    # deltas = function(method = "cie2000") {
-    #   mat <- self$ciede_matrix(method)
-    #   if (nrow(mat) <= 1) stop("Can't compute deltas for a single colour")
-    #   c(0, mat[cbind(1:(nrow(mat) - 1), 2:ncol(mat))])
-    # },
-    # cum_deltas = function(method = "cie2000") {
-    #   cumsum(self$deltas(method))
-    # },
-    # L_diff = function() {
-    #   c(0, diff(self$get_lab()[, "l"]))
-    # },
-    # swatch = function(cvd = FALSE, ...) {
-    #   colorspace::swatchplot(self$get_hex(), cvd = cvd, ...)
-    # },
-    # bands = function(...) {
-    #   pals::pal.bands(self$get_hex(), ...)
-    # },
-    # sineramp = function(...) {
-    #   pals::pal.bands(self$get_hex(), ...)
-    # }
+    },
+    # Utilities: search
+
+    #' @description Find color index by hex value
+    #' @param hex_value hex color code to search for
+    #' @return position of the value in the colour map or NA
+    match_hex = function(hex_value) {
+      match(toupper(hex_value), self$get_hex())
+    },
+    #' @description Get the full index of colours
+    index = function() {
+      seq_along(self$get_hex())
+    },
+
+    # Utilities: distances
+
+    #' @description Compute pairwise CIEDE2000 distances
+    #' @param method Distance metric, passed to [farver::compare_colour()].
+    ciede_matrix = function(method = "cie2000") {
+      lab_vals <- self$get_lab()
+      farver::compare_colour(lab_vals, from_space = "lab", method = method)
+    },
+    #' @description Return sequential CIEDE2000 deltas
+    #' @param method Distance metric, passed to [unipals::ciede_matrix()].
+    deltas = function(method = "cie2000") {
+      mat <- self$ciede_matrix(method)
+      if (nrow(mat) <= 1) stop("Can't compute deltas for a single colour")
+      c(0, mat[cbind(1:(nrow(mat) - 1), 2:ncol(mat))])
+    },
+    #' @description Return cumulative deltas
+    #' @param method Distance metric, passed to [unipals::deltas()].
+    cum_deltas = function(method = "cie2000") {
+      cumsum(self$deltas(method))
+    },
+    #' @description Return the deltas of the Lightness channel
+    L_deltas = function() {
+      c(0, diff(self$get_lab()[, "l"]))
+    },
+
+    # Utilities: Swatch plots
+
+    #' @description Plot a swatch of the palette
+    #' @param cvd Logical. If TRUE, apply color-vision-deficiency simulation.
+    #' @param ... Additional arguments passed to [colorspace::swatchplot()].
+    swatch = function(cvd = FALSE, ...) {
+      colorspace::swatch(self$get_hex(), cvd = cvd, ...)
+    },
+    #' @description Plot palette as bands
+    #' @param ... Additional arguments passed to [pals::pal.bands()].
+    bands = function(...) {
+      pals::pal.bands(self$get_hex(), ...)
+    },
+    #' @description Plot palette as sine ramp
+    #' @param ... Additional arguments passed to [pals::pal.sineramp()].
+    sineramp = function(...) {
+      pals::pal.bands(self$get_hex(), ...)
+    }
   )
 )
