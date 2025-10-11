@@ -48,6 +48,10 @@ Polo tanto, unha paleta de cor axeitada para a difusión científica de datos --
 -   Lexibilidade en monocromo.
 -   Reproducibilidade e Citabilidade.
 
+## Scientific Colour Maps
+
+Os anteriores principios materialízanse na colección coidadosamente elaborada de *Scientific Colour Maps* de Fabio Crameri. (`https://www.fabiocrameri.ch/colourmaps/`)
+
 ## Uniformidade Perceptual
 
 Unha paleta **perceptualmente uniforme** pondera de xeito idéntico unha mesma variación en todo o espazo de datos.
@@ -99,7 +103,7 @@ O espazo RGB é un modelo de cor baseado na combinación de tres cores primarias
 
 ## Espazos de cor: RGB. Un exemplo
 
-::::: colums
+:::: {.columns}
 ::: {.column width="40%"}
 ```{r}
 #| echo: TRUE
@@ -125,16 +129,109 @@ pares <- matrix(
 #| output-location: fragment
 
 pares$bands()
-getwd()
 ```
 :::
-:::::
+
+::::
 
 Estes dous pares de cores están separados pola mesma distancia --euclídea--, 20 unidades no espazo RGB.
 
 ::: fragment
 Pero baixo a nosa ollada o par azul diferenciase claramente mentres que os verdes son indiscernibles.
 :::
+
+## A peor paleta
+
+:::: {.columns}
+
+::: {.column width="45%"}
+Posiblemente en mais dunha ocasión temos visto ou usado esta paleta:
+
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+#| output-location: fragment
+
+rbpal <- 
+  rainbow(256) |>
+  unipals::as_colormap()
+
+rbpal$bands()
+```
+:::
+
+::: {.column width="45%"}
+::: fragment
+ou a súa irmá 'jet':
+
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+#| output-location: fragment
+jetpal <- 
+  unipals::jet_colors(256) |>
+  unipals::as_colormap()
+
+jetpal$bands()
+```
+:::
+:::
+::::
+
+---
+
+A primeira vista, o resultado pode parecer vistoso pola ampla gama cromática e cores intensas.
+
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+#| fig-align: center
+unipals::demoplot(jet_colors)
+```
+
+---
+
+Pero, por poñer un exemplo, así o vería unha persoa con deuteranopia
+
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+#| fig-align: center
+unipals::demoplot(jet_colors, cvd = "deutan")
+```
+
+## `rainbow` e `jet`. Os seus problemas
+
+Estas dúas paletas son a encarnación de todo o que non debe ter unha paleta axeitada para a representación científica de datos:
+
+-   Non presentan uniformidade perceptual (como demostraremos máis adiante).
+-   Non hai unha orde perceptual.
+-   As flutuacións de luminosidade introducen falsas fronteiras ou características nos datos.
+-   Non son accesibles a persoas con daltonismos.
+-   Tampouco son lexibles en escala de grises.
+
+---
+
+Así se verían baixo as distintas deficiencias na percepción da cor
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| fig-cap: "`rainbow`"
+rbpal$swatch(cvd = TRUE)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-cap: "`jet`"
+jetpal$swatch(cvd = TRUE)
+```
+:::
+::::
+
+Volveremos despois a elas con demostracións máis 'dramáticas'
 
 ## Espazos de cor: RGB
 
@@ -155,7 +252,7 @@ para definir unha paleta se pretendemos que sexa perceptualmente uniforme.
 O espazo de cor HCL (Hue, Chroma, Luminance) é un modelo deseñado para ser perceptualmente uniforme, que representa as cores segundo tres atributos que se corresponden coa percepción humana:
 
 ::: nonincremental
--   Hue (Matiz): tipo de cor (vermello, azul, verde…).
+-   Hue (Matiz): tipo de cor (vermello, azul, verde…). É un ángulo.
 -   Chroma (Croma): intensidade ou saturación da cor.
 -   Luminance (Luminosidade): claridade ou escuridade da cor.
 :::
@@ -166,29 +263,98 @@ O paquete `colorspace` enfócase na análise de mapas de cores no espazo HCL. Of
 
 Estas paletas son boas opcións, pero non seguen exactamente os criterios dos "Scientific Colour Maps" dos que falaremos a continuación.
 
+Asi e todo, aproveitaremos as paletas e utilidades deste paquete para explorar os tipos de paletas e as súas características.
+
+## Tipos de mapas de cor
+
+Segundo o tipo de datos a representar, as paletas poden ser:
+
+-   **Continuas**. Idealmente definidas mediante fórmulas que permitan obter un número ilimitado de cores. Na práctica adoitan ser conxuntos dun gran número de cores que se interpolan.
+
+-   **Discretas**. Na práctica van ser iguais que as continuas.
+
+-   **Categóricas**. Para poder empregarse con efectividade o número de categorías debe ser baixo. A separación entre cores debe ser idealmente máxima para unha boa separación.
+
+## Clases de mapas de cor
+
+Nunha dimensión adicional diferencianse varias clases de paletas:
+
+- **secuenciais**
+- **diverxentes**, para amosar desviacións respecto dun valor de referencia
+- **multisecuenciais**, para a comparación simultánea de varias categorías ou grupos, e
+- **cíclicas**, axeitadas para datos periódicos, como a hora do día, a dirección de fluxos ou fases dun ciclo
+
+## Exemplos: Paleta cualitativa
+
+```{r}
+#| fig-cap: "`colorspace` 'Harmonic'"
+# colorspace::specplot(scico::scico(256, palette = "batlow"))
+# colorspace::specplot(scico::scico(256, palette = "vik"))
+colorspace::specplot(colorspace::qualitative_hcl(100, "Harmonic"))
+```
+
+## Exemplos: Paleta secuencial
+
+```{r}
+#| fig-cap: "`colorspace` 'Purple-Yellow'"
+colorspace::specplot(colorspace::sequential_hcl(100, "Purple-Yellow"))
+```
+## Exemplos: Paleta diverxente
+
+```{r}
+#| fig-cap: "`colorspace` 'Vik'"
+colorspace::specplot(colorspace::diverging_hcl(100, "Vik"))
+```
+
+## Exemplos: Paleta multisecuencial
+
+```{r}
+#| fig-cap: "`scico` 'bukavu'"
+colorspace::specplot(scico::scico(100, palette = "bukavu"))
+```
+
+## Exemplos: Paleta cíclica
+
+```{r}
+#| fig-cap: "`scico` 'romaO'"
+colorspace::specplot(scico::scico(16, palette = "romaO"))
+```
+
 ## Espazos de cor: CIE Lab
 
-O espazo CIELAB (CIE 1976 L*, a*, b\*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
+O espazo CIELAB (CIE 1976 L\*, a\*, b\*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
 
+## Espazos de cor: CIE Lab
+
+:::::: columns
+:::: {.column width="60%"}
 ::: nonincremental
 -   L\**: luminosidade (de negro a branco, 0 a 100).*
--    *a\**: eixo verde-vermelho (valores negativos → verde, positivos → vermello).
--    *b\**: eixo azul-amarelo (valores negativos → azul, positivos → amarelo).
+-   *a\**: eixo verde-vermelho (valores negativos → verde, positivos → vermello).
+-   *b\**: eixo azul-amarelo (valores negativos → azul, positivos → amarelo).
 :::
-<!-- ![](./Lab_color_at_luminance_75%.png "Luminosidade ao 75%. *Fonte*: `de.wikipedia`") -->
+::::
+
+::: {.column width="40%"}
+![Luminosidade ao 75% (`de.wikipedia`)](Lab_color_at_luminance_75.png){.center}
+:::
+::::::
+
+## Espazos de cor: CIE Lab
+
 Este modelo é independente do dispositivo, o que permite comparar cores de forma consistente entre diferentes sistemas (pantallas, impresoras, etc.)
 
 ## Espazos de cor: CIE Lab. Medidas de distancia
 
-O espazo Lab elaborouse realizando experimentos con humanos, definindo o "observador promedio" a partires das probas.
+O espazo Lab deseñouse para ser uniforme, definindo un "observador promedio" a partires de experimentos con persoas.
 
--   ΔE\*ab (CIE76): Dado que o espazo de deseñou para ser uniforme, a fórmula orixinal para medir a distancia era simplemente a distancia euclidiana entre dous puntos no espazo LAB.
+- CIE76: a fórmula orixinal para medir a distancia era simplemente a distancia euclidiana.
 
--   ΔE00 (CIEDE2000): Posteriormente desenvolveuse unha fórmula mellorada que incorpora correccións para representar mellor as diferenzas reais percibidas polo ollo humano.
+- CIEDE2000: Posteriormente desenvolveuse unha fórmula mellorada que incorpora correccións para representar mellor as diferenzas reais percibidas polo ollo humano.
 
 ## Scientific Colour Maps
 
-Os 'Scientific Colour Maps' son unha colección de paletas deseñadas por Fabio Crameri, seguindo todos os principios que mencionamos inicialmente: uniformidade perceptual, inclusividade, orde perceptual, ...
+Os 'Scientific Colour Maps' son unha colección de paletas deseñadas por Fabio Crameri, seguindo todos os principios que mencionamos inicialmente: uniformidade perceptual, accesibilidade, orde perceptual, ...
 
 A diagnose destas realízase no espazo Lab, empregando principalmente a medida CIEDE2000.
 
