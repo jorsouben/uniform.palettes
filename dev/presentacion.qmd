@@ -13,6 +13,7 @@ format:
 
 editor: source
 ---
+
 ```{r}
 devtools::load_all()
 ```
@@ -97,8 +98,8 @@ Con métodos para calcular as distancias e erro perceptuais, conversión e repre
 O espazo RGB é un modelo de cor baseado na combinación de tres cores primarias de luz: vermello (Red), verde (Green) e azul (Blue). Cada cor represéntase como unha tripla de valores entre 0 e 255 ou 0 e 1, e é usado principalmente en pantallas e dispositivos dixitais para representar cores mediante luz.
 
 ## Espazos de cor: RGB. Un exemplo
-:::: {.colums}
 
+::::: colums
 ::: {.column width="40%"}
 ```{r}
 #| echo: TRUE
@@ -124,14 +125,14 @@ pares <- matrix(
 #| output-location: fragment
 
 pares$bands()
+getwd()
 ```
 :::
-
-::::
+:::::
 
 Estes dous pares de cores están separados pola mesma distancia --euclídea--, 20 unidades no espazo RGB.
 
-::: {.fragment}
+::: fragment
 Pero baixo a nosa ollada o par azul diferenciase claramente mentres que os verdes son indiscernibles.
 :::
 
@@ -143,46 +144,47 @@ A distancia no espazo RGB non reflicte ben a percepción visual humana porque es
 
 Por iso nunca debe usarse
 
-```r
+``` r
 colorRampPalette(vector_de_cores)
 ```
+
 para definir unha paleta se pretendemos que sexa perceptualmente uniforme.
 
 ## Espazos de cor: HCL
 
-O espazo de cor HCL (Hue, Chroma, Luminance) é un modelo perceptualmente uniforme que representa as cores segundo tres atributos que se corresponden coa percepción humana:
+O espazo de cor HCL (Hue, Chroma, Luminance) é un modelo deseñado para ser perceptualmente uniforme, que representa as cores segundo tres atributos que se corresponden coa percepción humana:
 
-::: {.nonincremental}
-- Hue (Matiz): tipo de cor (vermello, azul, verde…).
-- Chroma (Croma): intensidade ou saturación da cor.
-- Luminance (Luminosidade): claridade ou escuridade da cor.
+::: nonincremental
+-   Hue (Matiz): tipo de cor (vermello, azul, verde…).
+-   Chroma (Croma): intensidade ou saturación da cor.
+-   Luminance (Luminosidade): claridade ou escuridade da cor.
 :::
-
-Este modelo é especialmente útil en visualización de datos porque permite crear paletas de cores que manteñen a uniformidade perceptiva, evitando distorsións visuais que aparecen en modelos como RGB ou HSV
 
 ## Espazos de cor: HCL. O paquete `colorspace`
 
-O paquete `colorspace` enfócase na análise de mapas de cores no espazo HCL. Ofrece varias ferramentas que incorporo no meu fluxo de traballo así como unha colección de paletas uniformes **no espazo HCL**.
+O paquete `colorspace` enfócase na análise de mapas de cores no espazo HCL. Ofrece varias ferramentas que incorporei no meu fluxo de traballo así como unha colección de paletas uniformes **no espazo HCL**.
 
 Estas paletas son boas opcións, pero non seguen exactamente os criterios dos "Scientific Colour Maps" dos que falaremos a continuación.
 
 ## Espazos de cor: CIE Lab
 
-O espazo CIELAB (CIE 1976 L*, a*, b*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
+O espazo CIELAB (CIE 1976 L*, a*, b\*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
 
-L*: luminosidade (de negro a branco, 0 a 100).
-a*: eixo verde-vermelho (valores negativos → verde, positivos → vermello).
-b*: eixo azul-amarelo (valores negativos → azul, positivos → amarelo).
-
+::: nonincremental
+-   L\**: luminosidade (de negro a branco, 0 a 100).*
+-    *a\**: eixo verde-vermelho (valores negativos → verde, positivos → vermello).
+-    *b\**: eixo azul-amarelo (valores negativos → azul, positivos → amarelo).
+:::
+<!-- ![](./Lab_color_at_luminance_75%.png "Luminosidade ao 75%. *Fonte*: `de.wikipedia`") -->
 Este modelo é independente do dispositivo, o que permite comparar cores de forma consistente entre diferentes sistemas (pantallas, impresoras, etc.)
 
 ## Espazos de cor: CIE Lab. Medidas de distancia
 
 O espazo Lab elaborouse realizando experimentos con humanos, definindo o "observador promedio" a partires das probas.
 
-- ΔE*ab (CIE76): Dado que o espazo de deseñou para ser uniforme, a fórmula orixinal para medir a distancia era simplemente a distancia euclidiana entre dous puntos no espazo LAB.
+-   ΔE\*ab (CIE76): Dado que o espazo de deseñou para ser uniforme, a fórmula orixinal para medir a distancia era simplemente a distancia euclidiana entre dous puntos no espazo LAB.
 
-- ΔE00 (CIEDE2000): Posteriormente desenvolveuse unha fórmula mellorada que incorpora correccións para representar mellor as diferenzas reais percibidas polo ollo humano.
+-   ΔE00 (CIEDE2000): Posteriormente desenvolveuse unha fórmula mellorada que incorpora correccións para representar mellor as diferenzas reais percibidas polo ollo humano.
 
 ## Scientific Colour Maps
 
@@ -204,6 +206,7 @@ igepal_hex |>
 
 paleta$bands()
 ```
+
 ## Creando unha paleta: Extendendo a gama
 
 Pouco podemos facer con tan só tres cores, polo que tentaremos crear un gradiente entre elas.
@@ -222,19 +225,19 @@ nova_paleta(32)$deltas() |> plot()
 
 rainbowpal <- rainbow(256) |> as_colormap()
 jetpal <- jet_colors(256) |> as_colormap()
-plot_volcano_3d(bw = TRUE)
+volcano_3dplot(bw = TRUE)
 ```
 
 ## Con paleta jet
 
 ```{r}
-plot_volcano_3d(color_palette = jetpal , pal_rescale = TRUE,bw = TRUE)
+volcano_3dplot(pal = jetpal , pal_rescale = TRUE,bw = TRUE)
 ```
 
 ## Con rainbow
 
 ```{r}
-plot_volcano_3d(color_palette = rainbowpal , pal_rescale = TRUE,bw = TRUE)
+volcano_3dplot(pal = rainbowpal , pal_rescale = TRUE,bw = TRUE)
 ```
 
 ## Teñamos en conta o sentido da Luminancia
@@ -242,7 +245,7 @@ plot_volcano_3d(color_palette = rainbowpal , pal_rescale = TRUE,bw = TRUE)
 Sen embargo se temos en conta que o gradiente de luminosidade inflúe na orde percibida e aplicamos isto ao rescalado:
 
 ```{r}
-plot_volcano_3d(color_palette = jetpal , pal_rescale = TRUE, signed_deltas = TRUE, bw = TRUE)
+volcano_3dplot(pal = jetpal , pal_rescale = TRUE, signed_deltas = TRUE, bw = TRUE)
 ```
 
 ## Dous mapas de cor moi diferentes

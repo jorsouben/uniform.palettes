@@ -198,7 +198,7 @@ ColorMap <- R6::R6Class("ColorMap",
     #' @param cvd Logical. If TRUE, apply color-vision-deficiency simulation.
     #' @param ... Additional arguments passed to [colorspace::swatchplot()].
     swatch = function(cvd = FALSE, ...) {
-      colorspace::swatch(self$get_hex(), cvd = cvd, ...)
+      colorspace::swatchplot(self$get_hex(), cvd = cvd, ...)
     },
     #' @description Plot palette as bands
     #' @param ... Additional arguments passed to [pals::pal.bands()].
