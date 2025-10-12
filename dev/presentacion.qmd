@@ -358,6 +358,15 @@ Os 'Scientific Colour Maps' son unha colección de paletas deseñadas por Fabio 
 
 A diagnose destas realízase no espazo Lab, empregando principalmente a medida CIEDE2000.
 
+Vexamos uns exemplos:
+
+## Diagnose da paleta "Batlow" de *Scientific Colour Maps*
+
+```{r}
+unipals::diagnostic_plot(batlow_df)
+```
+
+
 ## Creando unha paleta: Selección inicial de cores
 
 Un dos requisitos iniciais ao deseñar unha paleta de cores para o IGE era incluír o *azul corporativo* da Xunta de Galicia.

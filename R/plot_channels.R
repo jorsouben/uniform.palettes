@@ -20,15 +20,16 @@ plot_channels <- function(pal, space = c("lab", "rgb")) {
 
   method() |>
     tibble::as_tibble() |>
-    mutate(index = dplyr::row_number()) |>
+    dplyr::mutate(index = dplyr::row_number()) |>
     tidyr::pivot_longer(
       -index,
       names_to = "channel",
       values_to = "value"
     ) |>
     ggplot2::ggplot(
-      aes(x = index, y = value, color = channel)
+      ggplot2::aes(x = index, y = value, color = channel)
     ) +
-    geom_line() +
-    theme_minimal()
+    ggplot2::geom_line() +
+    ggplot2::labs(x = "Palette index", y = "Value") +
+    ggplot2::theme_minimal()
 }
