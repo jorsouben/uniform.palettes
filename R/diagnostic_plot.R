@@ -19,7 +19,7 @@ diagnostic_plot <- function(pal, pal_name = NULL, show_channels = TRUE) {
       values = pal$deltas(),
       pal = pal$get_hex(),
       title = "ΔE2000",
-      max = 2,
+      max = 2.5,
       rescale = FALSE
     )
 

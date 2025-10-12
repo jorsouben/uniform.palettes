@@ -78,7 +78,8 @@ ColorMap <- R6::R6Class("ColorMap",
     initialize = function(colors, space = NULL) {
       if (is.null(space)) {
         if (is.character(colors) && all(grepl("^#", colors))) {
-          h_regex <- "^#[0-9a-fA-F]{6}$"
+          # h_regex <- "^#[0-9a-fA-F]{6}$"
+          h_regex <- "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$"
           if (all(grepl(h_regex, colors))) {
             space <- "hex"
           } else {

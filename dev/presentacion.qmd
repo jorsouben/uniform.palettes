@@ -97,49 +97,6 @@ Con métodos para calcular as distancias e erro perceptuais, conversión e repre
 
 [`unipals: https://github.com/jorsouben/uniform.palettes`](https://github.com/jorsouben/uniform.palettes)
 
-## Espazos de cor: RGB
-
-O espazo RGB é un modelo de cor baseado na combinación de tres cores primarias de luz: vermello (Red), verde (Green) e azul (Blue). Cada cor represéntase como unha tripla de valores entre 0 e 255 ou 0 e 1, e é usado principalmente en pantallas e dispositivos dixitais para representar cores mediante luz.
-
-## Espazos de cor: RGB. Un exemplo
-
-:::: {.columns}
-::: {.column width="40%"}
-```{r}
-#| echo: TRUE
-#| code-line-numbers: true
-  
-pares <- matrix(
-  c(
-    30, 255,   0,
-    10, 255,   0,
-     0, 230, 255,
-     0, 210, 255
-  ),
-  ncol = 3,
-  byrow = TRUE
-) |>
-  as_colormap()
-```
-:::
-
-::: {.fragment .column width="60%"}
-```{r}
-#| echo: TRUE
-#| output-location: fragment
-
-pares$bands()
-```
-:::
-
-::::
-
-Estes dous pares de cores están separados pola mesma distancia --euclídea--, 20 unidades no espazo RGB.
-
-::: fragment
-Pero baixo a nosa ollada o par azul diferenciase claramente mentres que os verdes son indiscernibles.
-:::
-
 ## A peor paleta
 
 :::: {.columns}
@@ -232,6 +189,49 @@ jetpal$swatch(cvd = TRUE)
 ::::
 
 Volveremos despois a elas con demostracións máis 'dramáticas'
+
+## Espazos de cor: RGB
+
+O espazo RGB é un modelo de cor baseado na combinación de tres cores primarias de luz: vermello (Red), verde (Green) e azul (Blue). Cada cor represéntase como unha tripla de valores entre 0 e 255 ou 0 e 1, e é usado principalmente en pantallas e dispositivos dixitais para representar cores mediante luz.
+
+## Espazos de cor: RGB. Un exemplo
+
+:::: {.columns}
+::: {.column width="40%"}
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+  
+pares <- matrix(
+  c(
+    30, 255,   0,
+    10, 255,   0,
+     0, 230, 255,
+     0, 210, 255
+  ),
+  ncol = 3,
+  byrow = TRUE
+) |>
+  as_colormap()
+```
+:::
+
+::: {.fragment .column width="60%"}
+```{r}
+#| echo: TRUE
+#| output-location: fragment
+
+pares$bands()
+```
+:::
+
+::::
+
+Estes dous pares de cores están separados pola mesma distancia --euclídea--, 20 unidades no espazo RGB.
+
+::: fragment
+Pero baixo a nosa ollada o par azul diferenciase claramente mentres que os verdes son indiscernibles.
+:::
 
 ## Espazos de cor: RGB
 
@@ -360,12 +360,40 @@ A diagnose destas realízase no espazo Lab, empregando principalmente a medida C
 
 Vexamos uns exemplos:
 
-## Diagnose da paleta "Batlow" de *Scientific Colour Maps*
+## *Scientific Colour Maps* "Batlow"
 
 ```{r}
+#| echo: TRUE
 unipals::diagnostic_plot(batlow_df)
 ```
+## Matlab "jet"
 
+```{r}
+unipals::diagnostic_plot(jetpal)
+```
+
+## `R` "rainbow"
+
+```{r}
+unipals::diagnostic_plot(rainbow(256))
+```
+
+## "Batlow" e "rainbow" comparadas
+
+```{r}
+unipals::compare_diagnostics(batlow_df, rainbow, pal_names = c("batlow", "rainbow"))
+
+```
+
+## `viridis` e `plasma` baixo a lupa
+
+```{r}
+unipals::compare_diagnostics(
+  viridisLite::viridis(256),
+  viridisLite::plasma(256),
+  pal_names = c("viridis", "plasma")
+  )
+```
 
 ## Creando unha paleta: Selección inicial de cores
 
