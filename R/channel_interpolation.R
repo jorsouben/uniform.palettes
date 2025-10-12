@@ -60,18 +60,8 @@ matrix_interpolation <- function(mat, n_out = 1000L, ensure_fit = TRUE) {
   )
 }
 
-# # Resamples a ColorMap by interpolation in LAB space
-# # Returns a ColorMap object with the resampled data
-# map_resample <- function(pal, space = c("lab", "rgb"), n_out = 1000L, ensure_fit = TRUE) {
-#   pal <- as_colormap(pal)
-#
-#   pal$get_lab() |>
-#     matrix_interpolation(n_out, ensure_fit) |>
-#     ColorMap$new()
-# }
-
-# Resamples a ColorMap by interpolation in LAB or RGB space
-# Returns a ColorMap object with the resampled data
+#' Resamples a ColorMap by interpolation in LAB or RGB space
+#' Returns a ColorMap object with the resampled data
 #'
 #' @param pal Character vector of hex color codes, `ColorMap` object, `matrix`
 #'  or `data.frame`

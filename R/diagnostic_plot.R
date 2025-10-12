@@ -7,7 +7,7 @@
 #' @param pal Vector of hex colour codes, matrix or data.frame or ColorMap
 #' @param show_channels Logical, show channels plot or not
 #' @param pal_name Character, name of the palette to show
-#' @returns NULL
+#' @return NULL
 #' @export
 #'
 diagnostic_plot <- function(pal, pal_name = NULL, show_channels = TRUE) {

@@ -7,7 +7,7 @@
 #' @param pal1 Vector of hex colour codes, matrix or data.frame or ColorMap
 #' @param pal2 Vector of hex colour codes, matrix or data.frame or ColorMap
 #' @param pal_names Character, name of the palettes to show
-#' @returns NULL
+#' @return NULL
 #' @export
 #'
 compare_diagnostics <- function(pal1, pal2, pal_names = NULL) {

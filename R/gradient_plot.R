@@ -8,7 +8,7 @@
 #' @param pal Vector of hex color codes
 #' @param title Name of the series
 #' @param max Optional numeric value to fix y-axis between 0 and max
-#' @param rescale Logical. If TRUE, rescale values to [0, 1] but show original ticks.
+#' @param rescale Logical. If TRUE, rescale values to `[0, 1]` but show original ticks.
 #'
 #' @returns NULL
 #' @export

@@ -4,7 +4,7 @@
 \alias{equalize}
 \title{Equalize n deltas after resampling a colormap}
 \usage{
-equalize(pal, n, anchor = NULL, n_resample = 3000L)
+equalize(pal, n, anchor = NULL, n_resample = 6000L, resample_space = "lab")
 }
 \arguments{
 \item{pal}{Character vector of hex color codes, \code{ColorMap} object, \code{matrix}
@@ -16,6 +16,9 @@ or \code{data.frame}}
 \verb{Not yet implemented}}
 
 \item{n_resample}{Integer, number of points of the intermediate interpolation.}
+
+\item{resample_space}{One of "lab" or "rgb", the color space in which the
+prior resampling takes place.}
 }
 \value{
 \code{ColorMap} object with the values interpolated in the given space

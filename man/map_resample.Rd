@@ -2,9 +2,10 @@
 % Please edit documentation in R/channel_interpolation.R
 \name{map_resample}
 \alias{map_resample}
-\title{Title}
+\title{Resamples a ColorMap by interpolation in LAB or RGB space
+Returns a ColorMap object with the resampled data}
 \usage{
-map_resample(pal, space = c("lab", "rgb"), n_out = 1000L, ensure_fit = TRUE)
+map_resample(pal, space = c("lab", "rgb"), n_out = 6000L, ensure_fit = TRUE)
 }
 \arguments{
 \item{pal}{Character vector of hex color codes, \code{ColorMap} object, \code{matrix}
@@ -21,5 +22,6 @@ in the output}
 \code{ColorMap} object with the values interpolated in the given space.
 }
 \description{
-Title
+Resamples a ColorMap by interpolation in LAB or RGB space
+Returns a ColorMap object with the resampled data
 }
