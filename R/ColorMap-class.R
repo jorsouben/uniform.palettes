@@ -48,8 +48,9 @@
 #'     \code{deltas()},
 #'     \code{cum_deltas()},
 #'     \code{L_deltas()}
+#'     \code{visual_error()}
 #'     \code{perceptual_error()}
-#'   }{Distance-related utilities}
+#'   }{Perception error-related utilities}
 #'   \item{
 #'     \code{swatch()},
 #'     \code{bands()},
@@ -175,19 +176,22 @@ ColorMap <- R6::R6Class("ColorMap",
     L_deltas = function() {
       c(0, diff(self$get_lab()[, "l"]))
     },
+    #' @description Calculate visual error along the colormap
+    #' Deviations from the ideal cummulative deltas
+    visual_error = function() {
+      actual <- self$cum_deltas()
+      total <- tail(actual, 1L)
+      n <- length(actual)
+      ideal <- seq(from = 0, by = total / (n - 1), length.out = n)
+      visual_error <- abs(actual - ideal) / total * 100
+      return(visual_error)
+    },
     #' @description Calculate RMS visual error
     #' Calculates the square root of the mean of the square
     #' deviations from the ideal cummulative deltas
     perceptual_error = function() {
-      deltas <- self$deltas()[-1]
-      n <- length(deltas)
-      # cumulative perceptual distances
-      cum_actual <- self$cum_deltas()[-1]
-      total <- tail(cum_actual, 1L)
-      # ideal straight line
-      cum_ideal <- seq(from = total / n, by = total / n, length.out = n)
       # RMS deviation of cumulative curve from ideal
-      rms <- sqrt(mean((cum_actual - cum_ideal)^2))
+      rms <- sqrt(mean((self$visual_error()[-1])^2))
       perr <- rms / total * 100
       return(perr)
     },

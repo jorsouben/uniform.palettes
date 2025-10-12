@@ -365,6 +365,9 @@ Un dos requisitos iniciais ao deseñar unha paleta de cores para o IGE era inclu
 Deseñar tan só un gradiente monocolor resulta aburrido, polo que engadimos dúas cores: un vermello similar ao presente na bandeira de Galicia e o vermello da Unión Europea.
 
 ```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+#| output-location: column-fragment
 
 paleta <- 
 igepal_hex |> 
@@ -377,12 +380,19 @@ paleta$bands()
 
 Pouco podemos facer con tan só tres cores, polo que tentaremos crear un gradiente entre elas.
 
+Para iso, precisamos realizar dous procesos:
+
+1. Extender o número de cores da paleta, mediante unha interpolación. Esta farase mediante *splines*.
+
+2. Ecualizar as distancias secuanciais CIEDE2000 entre pares de cores consecutivas. Necesariamente ten que facerse cas distancias acumuladas.
+
 ```{r}
 nova_paleta <- function(n) {
-map_resample(paleta, space = "lab", n_out = 32)
+  map_resample(paleta, space = "rgb", n_out = n, ensure_fit = FALSE)
 }
 
-nova_paleta(32)$deltas() |> plot()
+# nova_paleta(32)$deltas() |> plot()
+nova_paleta(40)$bands()
 ```
 
 ## Test plot

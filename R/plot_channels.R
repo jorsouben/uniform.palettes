@@ -11,7 +11,14 @@
 #'
 plot_channels <- function(pal, space = c("lab", "rgb")) {
   pal <- as_colormap(pal)
-  pal$get_lab() |>
+
+  method <-
+    switch(space,
+      lab = pal$get_lab,
+      rgb = pal$get_rgb
+    )
+
+  method() |>
     tibble::as_tibble() |>
     mutate(index = dplyr::row_number()) |>
     tidyr::pivot_longer(

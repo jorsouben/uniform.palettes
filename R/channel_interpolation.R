@@ -72,7 +72,6 @@ matrix_interpolation <- function(mat, n_out = 1000L, ensure_fit = TRUE) {
 
 # Resamples a ColorMap by interpolation in LAB or RGB space
 # Returns a ColorMap object with the resampled data
-#' Title
 #'
 #' @param pal Character vector of hex color codes, `ColorMap` object, `matrix`
 #'  or `data.frame`
@@ -83,7 +82,7 @@ matrix_interpolation <- function(mat, n_out = 1000L, ensure_fit = TRUE) {
 #'
 #' @returns `ColorMap` object with the values interpolated in the given space.
 #' @export
-map_resample <- function(pal, space = c("lab", "rgb"), n_out = 1000L, ensure_fit = TRUE) {
+map_resample <- function(pal, space = c("lab", "rgb"), n_out = 6000L, ensure_fit = TRUE) {
   space <- match.arg(space) # Ensures only "lab" or "rgb" are accepted
   pal <- as_colormap(pal)
 
@@ -106,13 +105,15 @@ map_resample <- function(pal, space = c("lab", "rgb"), n_out = 1000L, ensure_fit
 #' @param anchor Hex code or index of a color to keep anchored in the output
 #'  `Not yet implemented`
 #' @param n_resample Integer, number of points of the intermediate interpolation.
+#' @param resample_space One of "lab" or "rgb", the color space in which the
+#'  prior resampling takes place.
 #'
 #' @returns `ColorMap` object with the values interpolated in the given space
 #'  and equalized deltas.
 #' @export
 #'
-equalize <- function(pal, n, anchor = NULL, n_resample = 3000L) {
-  resample <- map_resample(pal, space = "lab", n_out = n_resample, ensure_fit = TRUE)
+equalize <- function(pal, n, anchor = NULL, n_resample = 6000L, resample_space = "lab") {
+  resample <- map_resample(pal, space = resample_space, n_out = n_resample, ensure_fit = TRUE)
   cdeltas <- resample$cum_deltas()
   total <- cdeltas |> tail(1L)
   if (is.null(anchor)) {

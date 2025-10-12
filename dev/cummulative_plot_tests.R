@@ -47,5 +47,5 @@ jetplot + geom_col(width = 1, aes(fill = delta)) +
   theme_minimal() +
   labs(
     x = "Palette step", y = "Cumulative ΔE2000",
-    title = "Cumulative ΔE2000 with discrete palette blocks"
+    title = "Cumulative ΔE2000"
   )
