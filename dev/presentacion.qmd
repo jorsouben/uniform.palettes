@@ -320,6 +320,14 @@ colorspace::specplot(scico::scico(100, palette = "bukavu"))
 colorspace::specplot(scico::scico(16, palette = "romaO"))
 ```
 
+## Orde perceptual
+
+Despois destes exemplos é bo momento para falar da orde perceptual.
+
+Esta ven determinada polo percorrido da paleta no espazo de cor e, especialmente pola luminosidade ou luminancia, que debe ser monótona e idealmente de pendente constante.
+
+Unha paleta adecuada transmite a orde dos valores de xeito intuitivo, sen necesidade de consultar a lenda. 
+
 ## Espazos de cor: CIE Lab
 
 O espazo CIELAB (CIE 1976 L\*, a\*, b\*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
@@ -381,7 +389,7 @@ unipals::diagnostic_plot(rainbow(256))
 ## "Batlow" e "rainbow" comparadas
 
 ```{r}
-unipals::compare_diagnostics(batlow_df, rainbow, pal_names = c("batlow", "rainbow"))
+unipals::compare_diagnostics(batlow_df, rbpal, pal_names = c("batlow", "rainbow"))
 
 ```
 
@@ -394,6 +402,56 @@ unipals::compare_diagnostics(
   pal_names = c("viridis", "plasma")
   )
 ```
+
+## Erro perceptual na práctica
+
+Para simular a distorsión inducida nos datos por un mapa de cor, creamos unha función `rescale_to_pal` que, empregando as distancias acumuladas e opcionalmente o signo da variación --dado pola variación na luminosidade--, reescala os datos en relación á distancia perceptual que lles otorga a paleta.
+
+## `volcano` ca paleta `batlow`
+:::: {.columns}
+
+::: {.column width="30%"}
+```{r}
+#| fig-width: 6.1
+#| fig-height: 8.6
+#| fig-align: center
+volcano_heatmap()
+```
+:::
+
+::: {.column width="70%"}
+```{r}
+#| fig-width: 6.1
+#| fig-height: 4.5
+#| fig-align: center
+volcano_3dplot()
+```
+:::
+
+::::
+
+## `volcano` ca paleta `jet`
+:::: {.columns}
+
+::: {.column width="30%"}
+```{r}
+#| fig-width: 6.1
+#| fig-height: 8.6
+#| fig-align: center
+volcano_heatmap(pal = jetpal)
+```
+:::
+
+::: {.column width="70%"}
+```{r}
+#| fig-width: 6.1
+#| fig-height: 4.5
+#| fig-align: center
+volcano_3dplot(pal = jetpal)
+```
+:::
+
+::::
 
 ## Creando unha paleta: Selección inicial de cores
 
@@ -423,14 +481,18 @@ Para iso, precisamos realizar dous procesos:
 
 2. Ecualizar as distancias secuanciais CIEDE2000 entre pares de cores consecutivas. Necesariamente ten que facerse cas distancias acumuladas.
 
+## Interpolando no espazo Lab
 ```{r}
 nova_paleta <- function(n) {
-  map_resample(paleta, space = "rgb", n_out = n, ensure_fit = FALSE)
+  map_resample(paleta, space = "lab", n_out = n, ensure_fit = FALSE)
 }
 
-# nova_paleta(32)$deltas() |> plot()
-nova_paleta(40)$bands()
+nova_paleta(256)$bands()
 ```
+
+## Typst
+
+![](typst_meme.jpg)
 
 ## Test plot
 

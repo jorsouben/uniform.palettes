@@ -50,7 +50,7 @@ volcano_3dplot <- function(
     x = ~x_seq,
     y = ~y_seq,
     z = ~z_values,
-    # colorsale = colorscale,
+    showscale = FALSE,
     colors = plot_pal,
     showscale = TRUE,
     contours = if (show_contours) {
@@ -82,9 +82,10 @@ volcano_3dplot <- function(
   # Configure layout
   p |> plotly::layout(
     scene = list(
-      width = 960,
-      height = 540,
-      autosize = FALSE,
+      # width = 300,
+      # height = 150,
+      # autosize = FALSE,
+      autosize = TRUE,
       camera = list(
         eye = list(x = 0.85, y = 0.55, z = 0.35),
         center = list(x = 0, y = 0, z = -0.2)
@@ -96,16 +97,19 @@ volcano_3dplot <- function(
         z = z_scale
       ),
       xaxis = list(
-        title = "X (meters)" # ,
+        title = "",
+        showticklabels = FALSE
       ),
       yaxis = list(
-        title = "Y (meters)" # ,
+        title = "",
+        showticklabels = FALSE
       ),
       zaxis = list(
-        title = "Elevation (meters)" # ,
+        title = "",
+        showticklabels = FALSE
       )
     ),
     margin = list(l = 10, r = 5, b = 0, t = 30),
-    title = "Volcano Dataset 3D Visualization"
+    title = ""
   )
 }

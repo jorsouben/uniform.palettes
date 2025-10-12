@@ -30,5 +30,6 @@ volcano_heatmap <- function(pal = batlow_df) {
     ggplot2::labs(
       fill = "Elevation (m)"
     ) +
-    ggplot2::theme_void()
+    ggplot2::theme_void() +
+    ggplot2::theme(legend.position = "none")
 }
