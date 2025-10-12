@@ -35,14 +35,16 @@ gradient_plot <- function(values, pal, title, max = NULL, rescale = TRUE) {
     ggplot2::labs(x = "Palette index", y = title)
 
   if (!is.null(max)) {
-    p <- p + ggplot2::scale_y_continuous(limits = c(0, max))
+    p <- p + ggplot2::coord_cartesian(ylim = c(0, max))
+    # p <- p + ggplot2::scale_y_continuous(limits = c(0, max))
   } else if (rescale) {
     # Show original values as axis labels
     breaks <- scales::pretty_breaks(n = 5)(range(data$values, na.rm = TRUE))
     labels <- scales::label_number()(rng[1] + breaks * diff(rng))
     p <- p + ggplot2::scale_y_continuous(limits = c(0, 1), breaks = breaks, labels = labels)
   } else {
-    p <- p + ggplot2::scale_y_continuous(limits = c(0, 1))
+    # p <- p + ggplot2::scale_y_continuous(limits = c(0, 1))
+    p <- p + ggplot2::coord_cartesian(ylim = c(0, 1))
   }
 
   p
