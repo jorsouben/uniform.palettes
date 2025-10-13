@@ -68,7 +68,7 @@ fit_line_and_sample <- function(mat, n,
   )
 }
 
-set.seed(1)
+# mat <- colorRampPalette(paleta$get_hex())(16)
 mat <- matrix(rnorm(30), ncol = 3)
 
 # Standard PCA
@@ -141,9 +141,11 @@ res <- fit_line_and_sample(
 )
 
 
-mat <- labpal
-
-res <- fit_line_and_sample(labpal, n = 256, mode = "pca", through_point = labpal[3,])
+# mat <- colorRampPalette(igepal_hex)(15)
+# labpal <- as_colormap(mat)$get_lab()
+labpal <- as_colormap(igepal_hex)$get_lab()
+# res <- fit_line_and_sample(labpal, n = 256, mode = "pca", through_point = labpal[8,])
+res <- fit_line_and_sample(labpal, n = 256, mode = "pca", through_point = labpal[2,])
 
 library(plotly)
 
@@ -161,15 +163,15 @@ library(plotly)
 # )
 
 # Prepare data frames
-df_points   <- as.data.frame(mat)
+df_points   <- as.data.frame(labpal)
 df_line     <- as.data.frame(res$sampled_points |> t())
 df_extremes <- as.data.frame(res$extremes)
 df_anchor   <- as.data.frame(t(res$anchor))
 
-colnames(df_points)   <- c("L", "a", "b")
-colnames(df_line)     <- c("L", "a", "b")
-colnames(df_extremes) <- c("L", "a", "b")
-colnames(df_anchor)   <- c("L", "a", "b")
+names(df_points)   <- c("L", "a", "b")
+names(df_line)     <- c("L", "a", "b")
+names(df_extremes) <- c("L", "a", "b")
+names(df_anchor)   <- c("L", "a", "b")
 
 # 3D plot with native pipe
 plot_ly() |>
@@ -224,24 +226,24 @@ df_anchor$col  <- lab_to_hex(as.matrix(df_anchor))
 
 plot_ly(type = "scatter3d", mode = "markers") |>
   add_markers(
-    data = df_points, x = ~L, y = ~a, z = ~b,
+    data = df_points, x = ~a, y = ~b, z = ~L,
     marker = list(color = df_points$col, size = 4),
     name = "Original points"
   ) |>
   add_markers(
-    data = df_anchor, x = ~L, y = ~a, z = ~b,
+    data = df_anchor, x = ~a, y = ~b, z = ~L,
     marker = list(color = df_anchor$col, size = 6, symbol = 'diamond'),
     name = "Anchor point"
   ) |>
   add_trace(
-    data = df_line, x = ~L, y = ~a, z = ~b,
+    data = df_line, x = ~a, y = ~b, z = ~L,
     type = 'scatter3d', mode = 'lines+markers',
     line = list(color = 'black', width = 2), # line stays visible
     marker = list(color = df_line$col, size = 4),
     name = "Fitted line & samples"
   ) |>
   add_markers(
-    data = df_extremes, x = ~L, y = ~a, z = ~b,
+    data = df_extremes, x = ~a, y = ~b, z = ~L,
     marker = list(color = df_extremes$col, size = 6, symbol = 'x'),
     name = "Extremes"
   ) |>

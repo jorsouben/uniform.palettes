@@ -1,5 +1,5 @@
 ---
-title: "Mapas de Cor"
+title: "O uso da cor na difusión de datos estatísticos: unha cuestión nada trivial"
 author:
   name: "Jordán Soubrier"
   affiliation: "Instituto Galego de Estatística"
@@ -479,66 +479,102 @@ Para iso, precisamos realizar dous procesos:
 
 1. Extender o número de cores da paleta, mediante unha interpolación. Esta farase mediante *splines*.
 
-2. Ecualizar as distancias secuanciais CIEDE2000 entre pares de cores consecutivas. Necesariamente ten que facerse cas distancias acumuladas.
+2. Ecualizar as distancias secuenciais CIEDE2000 entre pares de cores consecutivas: Créanse moitos puntos intermedios por interpolación e búscase aqueles que resultan nunhas 'deltas' acumuladas o máis próximas posible ás ideais (diagonal perfecta).
 
 ## Interpolando no espazo Lab
 ```{r}
-nova_paleta <- function(n) {
-  map_resample(paleta, space = "lab", n_out = n, ensure_fit = FALSE)
-}
+interp_lab <- 
+  paleta |>
+  map_resample(space = "lab", n_out = 256, ensure_fit = FALSE)
 
-nova_paleta(256)$bands()
+interp_lab |> 
+  diagnostic_plot()
 ```
+
+## Interpolando no espazo RGB
+```{r}
+interp_rgb <- 
+  colorRampPalette(paleta$get_hex())(256)
+
+interp_rgb |> 
+  diagnostic_plot()
+```
+## Ecualizando
+
+```{r}
+#| echo: TRUE
+#| code-line-numbers: true
+#| fig-align: center
+
+interp_rgb <- colorRampPalette(paleta$get_hex())(16)
+ecualizada <- interp_rgb |> unipals::equalize(n = 256)
+ecualizada |> unipals::diagnostic_plot()
+```
+
+## Resultado final?
+
+```{r}
+ecualizada$swatch(cvd = TRUE)
+```
+
+## Qué queda por facer?
+
+- Maximizar o constraste de L, facendo a curva de pendente constante.
+
+- Ecualizar de novo. Iterar
+
+- Evitar vermello/verde na mesma paleta
+
+- Observar a traxectoria no espazo 3D (parcialmente implementado), evitando traxectos 'enrevesados'
+
+- A estos efectos, obter a compoñente principal da nube de puntos orixinal para asegurar unha traxectoria recta e unha L monótona.
+
+# Conclusións
+
+Aínda que os resultados son prometedores, conseguir elaborar métodos para construír unha paleta que cumpla cos criterios establecidos require aínda moito esforzo adicional.
+
+Sen descartar seguir traballando neste proxecto, a recomendación actual é optar por empregar paletas de *Scientific Colour Maps*, accesibles en `R` a través do paquete `scico`.
+
+Para o noso uso, incluso algunhas delas combinan perfectamente ca imaxe corporativa.
+
+---
+```{r}
+scico::scico_palette_show()
+```
+
+---
+```{r}
+scipal <- function(pal = "batlow") {
+  function(n) scico::scico(n, palette = pal)
+}
+demoplot(scipal()) + patchwork::plot_annotation("batlow")
+```
+---
+```{r}
+colmap <- "hawaii"
+
+demoplot(scipal(colmap)) + patchwork::plot_annotation(colmap)
+```
+
+---
+```{r}
+colmap <- "davos"
+
+demoplot(scipal(colmap)) + patchwork::plot_annotation(colmap)
+```
+---
+```{r}
+colmap <- "lapaz"
+
+demoplot(scipal(colmap)) + patchwork::plot_annotation(colmap)
+```
+
+# Quarto e typst: alternativas a RMarkdown e $\LaTeX$
+
+## Quarto
+
+asdasd
 
 ## Typst
 
 ![](typst_meme.jpg)
-
-## Test plot
-
-```{r}
-
-rainbowpal <- rainbow(256) |> as_colormap()
-jetpal <- jet_colors(256) |> as_colormap()
-volcano_3dplot(bw = TRUE)
-```
-
-## Con paleta jet
-
-```{r}
-volcano_3dplot(pal = jetpal , pal_rescale = TRUE,bw = TRUE)
-```
-
-## Con rainbow
-
-```{r}
-volcano_3dplot(pal = rainbowpal , pal_rescale = TRUE,bw = TRUE)
-```
-
-## Teñamos en conta o sentido da Luminancia
-
-Sen embargo se temos en conta que o gradiente de luminosidade inflúe na orde percibida e aplicamos isto ao rescalado:
-
-```{r}
-volcano_3dplot(pal = jetpal , pal_rescale = TRUE, signed_deltas = TRUE, bw = TRUE)
-```
-
-## Dous mapas de cor moi diferentes
-
-```{r}
-
-# demoplot(jet_colors)
-# demoplot(jet_colors, cvd = "desaturate")
-# demoplot(jet_colors, cvd = "protan")
-# jetpal$plot_swatch(cvd = c("desaturate", "protan", "tritan", "deutan"))
-# jetpal$plot_sineramp(main = "jet")
-pals::pal.sineramp(jet_colors(256), main = "Paleta 'jet' (Matlab)")
-pals::pal.sineramp(pals::viridis(256), main = "Paleta 'viridis'")
-```
-
-## Rainbow
-
-```{r}
-rainbowpal <- rainbow(256) |> as_colormap()
-rainbowpal$swatch(cvd = c("desaturate", "protan", "tritan", "deutan"))
-```
