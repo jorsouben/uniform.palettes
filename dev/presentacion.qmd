@@ -80,15 +80,15 @@ Precisaremos:
 -   **`pals`**:: Colección de paletas, principalmemente baseadas nas publicacións de **Peter Kovesi**, e utilidades de diagnose numérica e visual.
 -   **`colorspace`**:: Colección de mapas de cor uniformes *no espazo HCL* e utilidades de conversión e diagnose. Destaca a simulación de 'CVDs' --Deficiencias da percepción da cor--
 
-## Paquete unipals
+## Creando ferramentas propias
 
 Os paquetes antes mencionados non proporcionan asi e todo unha forma de crear paletas uniformes desde cero, senon que proporcionan ferramentas para evalualas.
 
 Tampoco contan con métodos para replicar as análises de Fabio Crameri nin facer algunhas das representacións visuais desexadas.
 
-Polo tanto, para o desenvolvemento deste proxecto, comecei a escribir un sixelo paquete, `unipals`; moi rudimentario pero que simplifica o meu proceso exploratorio.
+Polo tanto, para o desenvolvemento deste proxecto, comecei a escribir un sixelo paquete; moi rudimentario pero que simplifica o meu proceso exploratorio.
 
-## Paquete unipals: a clase `ColorMap`
+## A clase `ColorMap`
 
 Despois de crear funcións de conversión, interpolación, etc., decateime de que non tiña a flexibilidade suficiente. Virei entón a definir unha clase `R6` como base.
 
@@ -96,7 +96,7 @@ As instancias desta clase, `ColorMap`, poden xenerarse a partires dun vector de 
 
 Con métodos para calcular as distancias e erro perceptuais, conversión e representación gráfica, facilitouse o meu fluxo de traballo significativamente.
 
-[`unipals: https://github.com/jorsouben/uniform.palettes`](https://github.com/jorsouben/uniform.palettes)
+<!-- [`unipals: https://github.com/jorsouben/uniform.palettes`](https://github.com/jorsouben/uniform.palettes) -->
 
 ## A peor paleta
 
@@ -112,7 +112,7 @@ Posiblemente en mais dunha ocasión temos visto ou usado esta paleta:
 
 rbpal <- 
   rainbow(256) |>
-  unipals::as_colormap()
+  as_colormap()
 
 rbpal$bands()
 ```
@@ -127,8 +127,8 @@ ou a súa irmá 'jet':
 #| code-line-numbers: true
 #| output-location: fragment
 jetpal <- 
-  unipals::jet_colors(256) |>
-  unipals::as_colormap()
+  jet_colors(256) |>
+  as_colormap()
 
 jetpal$bands()
 ```
@@ -144,7 +144,7 @@ A primeira vista, o resultado pode parecer vistoso pola ampla gama cromática e 
 #| echo: TRUE
 #| code-line-numbers: true
 #| fig-align: center
-unipals::demoplot(jet_colors)
+demoplot(jet_colors)
 ```
 
 ---
@@ -155,7 +155,7 @@ Pero, por poñer un exemplo, así o vería unha persoa con deuteranopia
 #| echo: TRUE
 #| code-line-numbers: true
 #| fig-align: center
-unipals::demoplot(jet_colors, cvd = "deutan")
+demoplot(jet_colors, cvd = "deutan")
 ```
 
 ## `rainbow` e `jet`. Os seus problemas
@@ -373,31 +373,31 @@ Vexamos uns exemplos:
 
 ```{r}
 #| echo: TRUE
-unipals::diagnostic_plot(batlow_df)
+diagnostic_plot(batlow_df)
 ```
 ## Matlab "jet"
 
 ```{r}
-unipals::diagnostic_plot(jetpal)
+diagnostic_plot(jetpal)
 ```
 
 ## `R` "rainbow"
 
 ```{r}
-unipals::diagnostic_plot(rainbow(256))
+diagnostic_plot(rainbow(256))
 ```
 
 ## "Batlow" e "rainbow" comparadas
 
 ```{r}
-unipals::compare_diagnostics(batlow_df, rbpal, pal_names = c("batlow", "rainbow"))
+compare_diagnostics(batlow_df, rbpal, pal_names = c("batlow", "rainbow"))
 
 ```
 
 ## `viridis` e `plasma` baixo a lupa
 
 ```{r}
-unipals::compare_diagnostics(
+compare_diagnostics(
   viridisLite::viridis(256),
   viridisLite::plasma(256),
   pal_names = c("viridis", "plasma")
@@ -508,8 +508,8 @@ interp_rgb |>
 #| fig-align: center
 
 interp_rgb <- colorRampPalette(paleta$get_hex())(16)
-ecualizada <- interp_rgb |> unipals::equalize(n = 256)
-ecualizada |> unipals::diagnostic_plot()
+ecualizada <- interp_rgb |> equalize(n = 256)
+ecualizada |> diagnostic_plot()
 ```
 
 ## Resultado final?
