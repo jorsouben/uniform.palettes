@@ -529,7 +529,7 @@ ecualizada$swatch(cvd = TRUE)
 
 - A estos efectos, obter a compoñente principal da nube de puntos orixinal para asegurar unha traxectoria recta e unha L monótona.
 
-# Conclusións
+## Conclusións
 
 Aínda que os resultados son prometedores, conseguir elaborar métodos para construír unha paleta que cumpla cos criterios establecidos require aínda moito esforzo adicional.
 
@@ -569,12 +569,146 @@ colmap <- "lapaz"
 demoplot(scipal(colmap)) + patchwork::plot_annotation(colmap)
 ```
 
-# Quarto e typst: alternativas a RMarkdown e $\LaTeX$
+## Quarto e typst: alternativas a RMarkdown e $\LaTeX$
 
-## Quarto
+## Quarto: Por que dar o salto?
 
-asdasd
+Quarto é a evolución natural de RMarkdown, con melloras en:
+
+::: nonincremental
+- Sintaxe máis limpa, melloras nas referencias a figuras, chunks, etc.
+
+- Multilinguaxe: soporte nativo para R, Python, Julia, Observable JS… sen hacks.
+
+- Outputs modernos: HTML, PDF, Word, Presentacións Reveal.js, libros, blogs… typst!. Todo dende o mesmo documento.
+:::
+
+## Quarto: vantaxes técnicas e de mantemento
+
+::: nonincremental
+- Modularidade e reutilización: chunks nomeados, macros, includes e variables globais.
+
+- Integración con VS Code, Jupyter e Neovim: experiencia fluída fóra de RStudio.
+
+- Proxectos organizados: quarto project permite xestionar múltiples documentos con configuración compartida.
+:::
+
+Documentación e comunidade en crecemento: soporte activo e exemplos actualizados.
+
+## Falemos de $\LaTeX$
+
+$\LaTeX$ é a opción de facto para converter documentos RMarkdown a PDF. E non sen boas razóns:
+
+::: nonincremental
+- Calidade tipográfica profesional: interletrado, xustificación, guións, fórmulas… todo impecable.
+
+- Estándar académico: artigos, teses, libros… LaTeX é a lingua franca da publicación científica.
+
+- Control absoluto: cada espazo, cada estilo, cada símbolo pode ser axustado ao milímetro.
+
+- Sistema de composición intelixente: separación de contido e presentación… en teoría.
+:::
+
+## Onde falla LaTeX na súa propia promesa?
+
+::: nonincremental
+- Dependencia de estilos externos (.sty): cada clase redefine o que é `\section`, `\paragraph`, etc.
+
+- Memoria técnica obrigatoria: ¿hai `\subsubsubsection` ou non? Depende do paquete.
+
+- Configuración idiomática complexa: babel, polyglossia, inputenc, fontenc...
+:::
+
+## Onde falla LaTeX na súa propia promesa?
+
+::: nonincremental
+- Programar estilos é un pesadelo: `\renewcommand`, `\newenvironment`, `\makeatletter`...
+
+- Formato infiltrado no contido: comandos como `\textbf`, `\vspace`, `\centering` aparecen por todas partes.
+:::
+
+## Podemos ter o mellor de $\LaTeX$ e Markdown nunha soa linguaxe?
+
+::: nonincremental
+- A calidade tipográfica de LaTeX
+
+- A sinxeleza estrutural de Markdown
+
+- A modularidade e estilo declarativo
+
+- A reproducibilidade e internacionalización sen dor
+
+- A personalización asequible
+:::
 
 ## Typst
 
 ![](typst_meme.jpg)
+
+## Typst: Puntos chave
+
+Typst busca unir a calidade tipográfica de LaTeX coa sinxeleza de Markdown.
+
+::: nonincremental
+- Linguaxe moderna e clara. Sintaxe limpa, intuitiva e declarativa, máis próxima a Markdown que a $\TeX$.
+
+- Rapidez grazas a Rust. Compilación case instantánea, mesmo en documentos longos. Permite a previsualización en tempo real.
+
+- Estilos programables sen dor. Sistema de estilos declarativo, con funcións e variables. Crear e modificar deseños é natural e asequible para o programador medio.
+:::
+
+## Typst: Puntos chave
+
+::: nonincremental
+- Internacionalización sinxela. Soporte nativo UTF-8. Para múltiples idiomas, sen a complexidade de babel ou polyglossia.
+
+- Integración moderna. CLI sinxela, reproducibilidade en proxectos, integración con editores actuais.
+
+- Ecosistema en crecemento. Comunidade activa, documentación clara, paquetes en expansión.
+:::
+
+## Un pequeno exemplo
+
+```typst {fit=contain}
+#set document(title: "Exemplo")
+
+= Exemplo
+
++ Texto en *negrita*, _cursiva_, ou con #text(red)[cores]
+
++ Un rectángulo
+  #rect()
+  
++ Unha fórmula peculiar:
+
+$ sum^pi_(🧠=1) #circle(radius: 4mm)/🥸 = #emoji.face.heart $
+
++ Unha táboa (Tomada da documentación de typst)
+
+#import table: cell, header
+
+#table(
+  columns: 2,
+  align: center,
+  header(
+    [*Trip progress*],
+    [*Itinerary*],
+  ),
+  cell(
+    align: right,
+    fill: fuchsia.lighten(80%),
+    [🚗],
+  ),
+  [Get in, folks!],
+  [🚗], [Eat curbside hotdog],
+  cell(align: left)[🌴🚗],
+  cell(
+    inset: 0.06em,
+    text(1.62em)[🛖🌅🌊],
+  ),
+)
+```
+---
+
+![](typst_example.png) {height=50%}
+
