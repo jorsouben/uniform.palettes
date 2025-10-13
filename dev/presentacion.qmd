@@ -6,6 +6,7 @@ author:
 
 format:
   revealjs:
+    embed-resources: true
     incremental: true
     center: true
     code-line-numbers: false
@@ -710,5 +711,5 @@ $ sum^pi_(🧠=1) #circle(radius: 4mm)/🥸 = #emoji.face.heart $
 ```
 ---
 
-![](typst_example.png) {height=50%}
+![](typst_example.png)
 
