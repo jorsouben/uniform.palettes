@@ -87,7 +87,8 @@ volcano_3dplot <- function(
       # autosize = FALSE,
       autosize = TRUE,
       camera = list(
-        eye = list(x = 0.85, y = 0.55, z = 0.35),
+        eye = list(x = 0.55, y = -0.75, z = 0.75),
+        # eye = list(x = 0.85, y = 0.55, z = 0.35),
         center = list(x = 0, y = 0, z = -0.2)
       ),
       aspectmode = "manual",

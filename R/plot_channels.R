@@ -29,7 +29,7 @@ plot_channels <- function(pal, space = c("lab", "rgb")) {
     ggplot2::ggplot(
       ggplot2::aes(x = index, y = value, color = channel)
     ) +
-    ggplot2::geom_line() +
+    ggplot2::geom_line(linewidth = 0.8) +
     ggplot2::labs(x = "Palette index", y = "Value") +
     ggplot2::theme_minimal()
 }

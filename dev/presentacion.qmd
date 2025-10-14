@@ -272,11 +272,9 @@ Asi e todo, aproveitaremos as paletas e utilidades deste paquete para explorar o
 
 Segundo o tipo de datos a representar, as paletas poden ser:
 
--   **Continuas**. Idealmente definidas mediante fórmulas que permitan obter un número ilimitado de cores. Na práctica adoitan ser conxuntos dun gran número de cores que se interpolan.
-
--   **Discretas**. Na práctica van ser iguais que as continuas.
-
--   **Categóricas**. Para poder empregarse con efectividade o número de categorías debe ser baixo. A separación entre cores debe ser idealmente máxima para unha boa separación.
+- **Continuas**. Idealmente definidas mediante fórmulas que permitan obter un número ilimitado de cores. Na práctica adoitan ser conxuntos dun gran número de cores que se interpolan.
+- **Discretas**. Na práctica van ser iguais que as continuas.
+- **Categóricas**. Para poder empregarse con efectividade o número de categorías debe ser baixo. A separación entre cores debe ser idealmente máxima para unha boa separación.
 
 ## Clases de mapas de cor
 
