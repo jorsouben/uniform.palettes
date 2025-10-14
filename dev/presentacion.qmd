@@ -6,6 +6,7 @@ author:
 
 format:
   revealjs:
+    slide-number: c/t
     embed-resources: true
     incremental: true
     center: true
@@ -31,13 +32,13 @@ Este resulta ser unha excelente porta de entrada a esta problemática ademáis d
 
 ## Primeiros pasos
 
-A primeira conclusión rotunda é que a paleta --ou mapa-- de cores empregada na visualización de datos debe ser unha entidade separada da imaxe corporativa, dos elementos visuais da web, revistas, publicacións... Así e todo, pode buscarse unha harmonía entre ambas seleccións de cores.
+A primeira conclusión rotunda é que a paleta --ou mapa de cores-- empregada na visualización de datos debe considerarse unha entidade separada dos elementos de imaxe corporativa, de marca, estéticos... Así e todo, pode buscarse unha harmonía entre ambas seleccións de cores.
 
-A segunda e máis importante: As mapas de cores aplicadas aos datos deben ser científicas.
+A segunda e máis importante: As mapas de cores aplicadas aos datos deben ser **científicas**.
 
 ## Mapas de cores científicos
 
-A presentación de datos científicos debe facerse sen introducir características ('features') artificiais ou eliminar detalles reais, ademáis de ser universalmente lexible. Non debe distorsionar os datos e ten que transmitir verazmente a realidade destes.
+A presentación de datos científicos debe facerse sen introducir características artificiais ou eliminar detalles reais, ademáis de ser universalmente accesible. Non debe distorsionar os datos e ten que transmitir verazmente a realidade destes.
 
 ## Propiedades desexables
 
@@ -51,13 +52,14 @@ Polo tanto, unha paleta de cor axeitada para a difusión científica de datos --
 
 ## Scientific Colour Maps
 
-Os anteriores principios materialízanse na colección coidadosamente elaborada de *Scientific Colour Maps* de Fabio Crameri. (`https://www.fabiocrameri.ch/colourmaps/`)
+Os anteriores principios materialízanse na colección de *Scientific Colour Maps* de Fabio Crameri, da que falaremos despois.
+(`https://www.fabiocrameri.ch/colourmaps/`)
 
 ## Uniformidade Perceptual
 
 Unha paleta **perceptualmente uniforme** pondera de xeito idéntico unha mesma variación en todo o espazo de datos.
 
-As distancias entre puntos de datos e as cores correspondentes deben seguir unha proporción constante.
+As distancias entre puntos de datos e as distancias entre cores correspondentes deben seguir unha proporción constante.
 
 Pero, como medimos as distancias entre cores?
 
@@ -84,7 +86,7 @@ Precisaremos:
 
 Os paquetes antes mencionados non proporcionan asi e todo unha forma de crear paletas uniformes desde cero, senon que proporcionan ferramentas para evalualas.
 
-Tampoco contan con métodos para replicar as análises de Fabio Crameri nin facer algunhas das representacións visuais desexadas.
+Tampouco contan con métodos para replicar as análises de Fabio Crameri nin facer algunhas das representacións visuais desexadas.
 
 Polo tanto, para o desenvolvemento deste proxecto, comecei a escribir un sixelo paquete; moi rudimentario pero que simplifica o meu proceso exploratorio.
 
@@ -110,7 +112,7 @@ Posiblemente en mais dunha ocasión temos visto ou usado esta paleta:
 #| code-line-numbers: true
 #| output-location: fragment
 
-rbpal <- 
+rbpal <-
   rainbow(256) |>
   as_colormap()
 
@@ -126,7 +128,7 @@ ou a súa irmá 'jet':
 #| echo: TRUE
 #| code-line-numbers: true
 #| output-location: fragment
-jetpal <- 
+jetpal <-
   jet_colors(256) |>
   as_colormap()
 
@@ -160,17 +162,17 @@ demoplot(jet_colors, cvd = "deutan")
 
 ## `rainbow` e `jet`. Os seus problemas
 
-Estas dúas paletas son a encarnación de todo o que non debe ter unha paleta axeitada para a representación científica de datos:
+Estas dúas paletas son a encarnación de todo o que non debe ser unha paleta axeitada para a representación científica de datos:
 
 -   Non presentan uniformidade perceptual (como demostraremos máis adiante).
 -   Non hai unha orde perceptual.
 -   As flutuacións de luminosidade introducen falsas fronteiras ou características nos datos.
--   Non son accesibles a persoas con daltonismos.
+-   Non son accesibles a persoas con DPCs.
 -   Tampouco son lexibles en escala de grises.
 
 ---
 
-Así se verían baixo as distintas deficiencias na percepción da cor
+Así veríanse baixo as distintas deficiencias na percepción da cor
 
 :::: {.columns}
 
@@ -202,13 +204,13 @@ O espazo RGB é un modelo de cor baseado na combinación de tres cores primarias
 ```{r}
 #| echo: TRUE
 #| code-line-numbers: true
-  
+
 pares <- matrix(
   c(
-    30, 255,   0,
-    10, 255,   0,
-     0, 230, 255,
-     0, 210, 255
+    30, 255, 0,
+    10, 255, 0,
+    0, 230, 255,
+    0, 210, 255
   ),
   ncol = 3,
   byrow = TRUE
@@ -250,19 +252,19 @@ para definir unha paleta se pretendemos que sexa perceptualmente uniforme.
 
 ## Espazos de cor: HCL
 
-O espazo de cor HCL (Hue, Chroma, Luminance) é un modelo deseñado para ser perceptualmente uniforme, que representa as cores segundo tres atributos que se corresponden coa percepción humana:
+O espazo de cor HCL (Hue, Chroma, Luminance) é un modelo deseñado para ser perceptualmente uniforme, que representa as cores segundo tres atributos relacionados ca percepción humana:
 
 ::: nonincremental
--   Hue (Matiz): tipo de cor (vermello, azul, verde…). É un ángulo.
--   Chroma (Croma): intensidade ou saturación da cor.
--   Luminance (Luminosidade): claridade ou escuridade da cor.
+-   Hue (*Matiz*): tipo de cor (vermello, azul, verde…). (ángulo).
+-   Chroma (*Croma*): intensidade ou saturación da cor. (distancia)
+-   Luminance (*Luminosidade*): claridade ou escuridade da cor.
 :::
 
 ## Espazos de cor: HCL. O paquete `colorspace`
 
 O paquete `colorspace` enfócase na análise de mapas de cores no espazo HCL. Ofrece varias ferramentas que incorporei no meu fluxo de traballo así como unha colección de paletas uniformes **no espazo HCL**.
 
-Estas paletas son boas opcións, pero non seguen exactamente os criterios dos "Scientific Colour Maps" dos que falaremos a continuación.
+Estas paletas son boas opcións, pero non seguen exactamente os criterios dos "Scientific Colour Maps".
 
 Asi e todo, aproveitaremos as paletas e utilidades deste paquete para explorar os tipos de paletas e as súas características.
 
@@ -289,8 +291,6 @@ Nunha dimensión adicional diferencianse varias clases de paletas:
 
 ```{r}
 #| fig-cap: "`colorspace` 'Harmonic'"
-# colorspace::specplot(scico::scico(256, palette = "batlow"))
-# colorspace::specplot(scico::scico(256, palette = "vik"))
 colorspace::specplot(colorspace::qualitative_hcl(100, "Harmonic"))
 ```
 
@@ -323,35 +323,35 @@ colorspace::specplot(scico::scico(16, palette = "romaO"))
 
 ## Orde perceptual
 
-Despois destes exemplos é bo momento para falar da orde perceptual.
+Á luz dos anteriores exemplos, falemos da orde perceptual.
 
-Esta ven determinada polo percorrido da paleta no espazo de cor e, especialmente pola luminosidade ou luminancia, que debe ser monótona e idealmente de pendente constante.
+Unha paleta adecuada transmite a orde dos valores de xeito intuitivo, sen necesidade de consultar unha lenda. 
 
-Unha paleta adecuada transmite a orde dos valores de xeito intuitivo, sen necesidade de consultar a lenda. 
+Esta orde perceptual ven determinada polo percorrido da paleta no espazo de cor e, especialmente, pola luminancia, que debe ser monótona e idealmente de pendente constante.
 
 ## Espazos de cor: CIE Lab
 
-O espazo CIELAB (CIE 1976 L\*, a\*, b\*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa todas as cores visibles para o ollo humano mediante tres eixos:
+O espazo CIELAB (CIE 1976 L\*, a\*, b\*) é un modelo tridimensional perceptualmente uniforme desenvolvido pola Comisión Internacional da Iluminación (CIE). Representa as cores visibles para o ollo humano mediante tres eixos:
 
 ## Espazos de cor: CIE Lab
 
 :::::: columns
 :::: {.column width="60%"}
 ::: nonincremental
--   L\**: luminosidade (de negro a branco, 0 a 100).*
--   *a\**: eixo verde-vermelho (valores negativos → verde, positivos → vermello).
--   *b\**: eixo azul-amarelo (valores negativos → azul, positivos → amarelo).
+- *L\**: luminosidade* (de negro a branco, 0 a 100).
+- *a\**: eixo verde(-) - vermellov(+)y
+- *b\**: eixo azul(-) - amarelo(+)
 :::
+
+Este modelo é independente do dispositivo, o que permite comparar cores de forma consistente entre diferentes sistemas (pantallas, impresoras, etc.)
+
 ::::
 
 ::: {.column width="40%"}
 ![Luminosidade ao 75% (`de.wikipedia`)](Lab_color_at_luminance_75.png){.center}
 :::
+
 ::::::
-
-## Espazos de cor: CIE Lab
-
-Este modelo é independente do dispositivo, o que permite comparar cores de forma consistente entre diferentes sistemas (pantallas, impresoras, etc.)
 
 ## Espazos de cor: CIE Lab. Medidas de distancia
 
@@ -391,7 +391,6 @@ diagnostic_plot(rainbow(256))
 
 ```{r}
 compare_diagnostics(batlow_df, rbpal, pal_names = c("batlow", "rainbow"))
-
 ```
 
 ## `viridis` e `plasma` baixo a lupa
@@ -401,7 +400,7 @@ compare_diagnostics(
   viridisLite::viridis(256),
   viridisLite::plasma(256),
   pal_names = c("viridis", "plasma")
-  )
+)
 ```
 
 ## Erro perceptual na práctica
@@ -465,8 +464,8 @@ Deseñar tan só un gradiente monocolor resulta aburrido, polo que engadimos dú
 #| code-line-numbers: true
 #| output-location: column-fragment
 
-paleta <- 
-igepal_hex |> 
+paleta <-
+  igepal_hex |>
   ColorMap$new()
 
 paleta$bands()
@@ -484,20 +483,20 @@ Para iso, precisamos realizar dous procesos:
 
 ## Interpolando no espazo Lab
 ```{r}
-interp_lab <- 
+interp_lab <-
   paleta |>
   map_resample(space = "lab", n_out = 256, ensure_fit = FALSE)
 
-interp_lab |> 
+interp_lab |>
   diagnostic_plot()
 ```
 
 ## Interpolando no espazo RGB
 ```{r}
-interp_rgb <- 
+interp_rgb <-
   colorRampPalette(paleta$get_hex())(256)
 
-interp_rgb |> 
+interp_rgb |>
   diagnostic_plot()
 ```
 ## Ecualizando
