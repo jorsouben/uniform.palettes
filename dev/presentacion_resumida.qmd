@@ -157,12 +157,14 @@ Segundo o tipo de datos a representar, as paletas poden ser:
 
 ## Clases de mapas de cor
 
-Nunha dimensión adicional diferencianse varias clases de paletas:
+<!-- Nunha dimensión adicional diferencianse varias clases de paletas: -->
 
+::: nonincremental
 - **secuenciais**, datos nun intervalo con valores mínimo e máximo.
 - **diverxentes**, para amosar desviacións respecto dun valor de referencia.
 - **multisecuenciais**, para a comparación simultánea de varias categorías ou grupos, e
 - **cíclicas**, axeitadas para datos periódicos, como a dirección de fluxos ou fases dun ciclo
+:::
 
 ## Exemplos: Paleta cualitativa
 
