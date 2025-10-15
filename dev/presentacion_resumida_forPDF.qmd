@@ -4,7 +4,7 @@ title: "O uso da cor na difusión de datos estatísticos"
 format:
   revealjs:
     theme: default
-    css: style.css
+    css: style2.css
     slide-number: c/t
     embed-resources: true
     incremental: true
@@ -384,9 +384,9 @@ volcano_3dplot(pal = jetpal)
 
 ## Creando unha paleta: Selección inicial de cores
 
-Un dos requisitos iniciais ao deseñar unha paleta de cores para o IGE era incluír o *azul corporativo* da Xunta de Galicia.
+A idea inicial inicial ao deseñar unha paleta para o IGE era incluír o *azul corporativo* da Xunta de Galicia.
 
-Deseñar tan só un gradiente monocolor resulta aburrido, polo que engadimos dúas cores: un vermello similar ao presente na bandeira de Galicia e o vermello da Unión Europea.
+A este engadímoslle duas cores contrastadas:
 
 ```{r}
 #| echo: TRUE
@@ -400,7 +400,7 @@ paleta <-
 paleta$bands()
 ```
 
-## Creando unha paleta: Extendendo a gama
+## Ampliando a paleta
 
 Pouco podemos facer con tan só tres cores, polo que tentaremos crear un gradiente entre elas.
 

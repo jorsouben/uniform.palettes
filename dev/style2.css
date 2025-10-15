@@ -1,0 +1,10 @@
+.slide-logo {
+	position: fixed;
+	top: 20px;
+	/* bottom: 10px; */
+	right: 20px;
+	width: 200px;
+	height: auto;
+	z-index: 1000;
+}]
+
