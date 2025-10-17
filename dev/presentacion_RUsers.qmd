@@ -137,6 +137,8 @@ Para traballar na creación e dunha potencial paleta científica, replicando as 
 
 Isto fixo o fluxo de traballo máis doado e flexible.
 
+[`unipals: https://github.com/jorsouben/uniform.palettes`](https://github.com/jorsouben/uniform.palettes)
+
 ## Espazos de cor: HCL
 
 ::: nonincremental
