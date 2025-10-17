@@ -12,7 +12,7 @@ This package is an experimental attempt to study and potentially automate the ge
 - 🔄 Convert between color spaces (HEX, RGB, LAB)
 - 📊 Analyze perceptual uniformity using CIEDE2000 metrics
 - 🔧 Tools for palette equalization and interpolation
-- 📈 Visualization utilities perceptual qualities and distortion.
+- 📈 Visualization utilities for perceptual qualities and distortion.
 
 ## Installation
 
@@ -41,6 +41,12 @@ pal$cum_deltas() # Cumulative differences
 pal$swatch()     # Color swatches
 pal$bands()      # Color bands
 pal$sineramp()   # Sinusoidal ramp test
+
+# Diagnostics plot
+pal |> diagnostic_plot()
+
+# Perceptual distances equalization
+pal |> equalize(n = 256)
 ```
 
 ## Key Functions
